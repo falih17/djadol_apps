@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
-import 'retail.dart';
+import 'jurnal.dart';
 
-class RetailAddPage extends StatefulWidget {
-  final Retail? item;
-  const RetailAddPage({super.key, this.item});
+class JurnalAddPage extends StatefulWidget {
+  final Jurnal? item;
+  const JurnalAddPage({super.key, this.item});
 
   @override
-  State<RetailAddPage> createState() => _RetailAddPageState();
+  State<JurnalAddPage> createState() => _JurnalAddPageState();
 }
 
-class _RetailAddPageState extends State<RetailAddPage> {
+class _JurnalAddPageState extends State<JurnalAddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController name = TextEditingController();
@@ -27,8 +27,8 @@ class _RetailAddPageState extends State<RetailAddPage> {
 
   Future<void> initData() async {
     if (widget.item != null) {
-      name.text = widget.item!.name;
-      address.text = widget.item!.address;
+      // name.text = widget.item!.name;
+      // address.text = widget.item!.address;
     }
   }
 
@@ -59,7 +59,7 @@ class _RetailAddPageState extends State<RetailAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Retail'),
+        title: const Text('Jurnal'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -69,12 +69,6 @@ class _RetailAddPageState extends State<RetailAddPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ZInputImage(
-                  url: (widget.item?.picture.isEmpty ?? true)
-                      ? ''
-                      : widget.item!.picture,
-                  onChanged: (value) => picture = value,
-                ),
                 ZInput(
                   label: 'Name',
                   controller: name,

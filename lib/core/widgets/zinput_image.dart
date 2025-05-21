@@ -46,21 +46,32 @@ class _ZInputImageState extends State<ZInputImage> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
-          Center(
-            child: _image == null
-                ? (widget.url.isEmpty)
-                    ? const Center(
-                        child: Icon(
-                          Icons.image,
-                          color: Colors.grey,
-                          size: 100,
-                        ),
-                      )
-                    : Image.network(widget.url)
-                : Image.file(
-                    File(_image!.path),
-                    fit: BoxFit.fill,
-                  ),
+          Container(
+            color: Colors.grey[100],
+            height: 200,
+            child: Center(
+              child: _image == null
+                  ? (widget.url.isEmpty)
+                      ? const Center(
+                          child: Icon(
+                            Icons.image,
+                            color: Colors.grey,
+                            size: 100,
+                          ),
+                        )
+                      : Image.network(
+                          widget.url,
+                          errorBuilder: (context, error, stackTrace) => Icon(
+                            Icons.image,
+                            color: Colors.grey,
+                            size: 100,
+                          ),
+                        )
+                  : Image.file(
+                      File(_image!.path),
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
           Row(
             children: [

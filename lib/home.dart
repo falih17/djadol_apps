@@ -1,6 +1,6 @@
-import 'package:djadol_mobile/auth/login_page.dart';
 import 'package:djadol_mobile/core/widgets/zcard.dart';
 import 'package:flutter/material.dart';
+import 'agen/jurnal/jurnal_list.dart';
 import 'agen/retail/retail_list.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,10 +13,10 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           InkWell(
-            child: ZCard(title: 'Login'),
+            child: ZCard(title: 'Jurnal'),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const LoginPage(),
+                builder: (context) => const JurnalListPage(),
               ),
             ),
           ),

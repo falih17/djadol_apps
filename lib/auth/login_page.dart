@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/utils/api_service.dart';
 import '../core/widgets/zui.dart';
+import '../home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -82,7 +83,10 @@ class _LoginPageState extends State<LoginPage> {
       final r = await ApiService().post('/auth/login', body, context: context);
       print(r);
       ApiService().setToken(r.data['token']);
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
       ZToast.success(context, 'Login success');
     } catch (e) {
       ZToast.error(context, 'Error, Failed to login');
