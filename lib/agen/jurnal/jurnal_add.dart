@@ -15,9 +15,10 @@ class JurnalAddPage extends StatefulWidget {
 class _JurnalAddPageState extends State<JurnalAddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController name = TextEditingController();
-  TextEditingController address = TextEditingController();
-  XFile? picture;
+  TextEditingController count = TextEditingController();
+  TextEditingController price = TextEditingController();
+  String retailId = '';
+  String productId = '';
 
   @override
   void initState() {
@@ -35,13 +36,11 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   Future<void> submit() async {
     try {
       Map<String, dynamic> data = {
-        'form_id': '31',
-        'name': name.text,
-        'address': address.text,
+        'form_id': '33',
+        'count': count.text,
+        'price': price.text,
+        'retail_id': retailId,
       };
-      if (picture != null) {
-        data.addAll({'picture': multiPartFile(picture!.path)});
-      }
 
       if (widget.item == null) {
         await ApiService().post('/form_action', data, context: context);
@@ -70,14 +69,24 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ZInput(
-                  label: 'Name',
-                  controller: name,
+                  label: 'Count',
+                  controller: count,
                   required: false,
                 ),
                 ZInput(
-                  label: 'Address',
-                  controller: address,
+                  label: 'Price',
+                  controller: price,
                   required: false,
+                ),
+                ZInputSelect(
+                  label: 'Retail',
+                  url: '/all/31',
+                  vData: 'name',
+                  vKey: 'id',
+                  id: widget.item?.retailId,
+                  onChanged: (v) {
+                    retailId = v;
+                  },
                 ),
                 const SizedBox(height: 30),
                 ZButton(

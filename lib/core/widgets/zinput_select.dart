@@ -38,7 +38,7 @@ class _ZInputSelectState extends State<ZInputSelect> {
   }
 
   Future<void> getOneData() async {
-    if (widget.id!.isNotEmpty) {
+    if (widget.id != null) {
       final result = await ApiService().get(
         '${widget.url}/${widget.id}',
       );
@@ -120,7 +120,7 @@ class ZInputSelectPage extends StatefulWidget {
 class _ZInputSelectPageState extends State<ZInputSelectPage> {
   static const _pageSize = 20;
   final PagingController<int, dynamic> _pagingController =
-      PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 0);
 
   @override
   void initState() {
