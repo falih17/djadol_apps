@@ -40,6 +40,10 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         'count': count.text,
         'price': price.text,
         'retail_id': retailId,
+        'product_id': productId,
+        'status': 'in',
+        'agen_id': '31',
+        'company_id': '1',
       };
 
       if (widget.item == null) {
@@ -48,7 +52,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         data['id'] = widget.item!.id;
         await ApiService().post('/form_action', data, context: context);
       }
-      Navigator.pop(context, true);
+      // Navigator.pop(context, true);
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
     }
@@ -86,6 +90,16 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   id: widget.item?.retailId,
                   onChanged: (v) {
                     retailId = v;
+                  },
+                ),
+                ZInputSelect(
+                  label: 'Product',
+                  url: '/all/30',
+                  vData: 'name',
+                  vKey: 'id',
+                  id: widget.item?.productId,
+                  onChanged: (v) {
+                    productId = v;
                   },
                 ),
                 const SizedBox(height: 30),
