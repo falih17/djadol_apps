@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../core/geo_location/geo_widget.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'retail.dart';
@@ -17,6 +18,8 @@ class _RetailAddPageState extends State<RetailAddPage> {
 
   TextEditingController name = TextEditingController();
   TextEditingController address = TextEditingController();
+  double? latitude;
+  double? longitude;
   XFile? picture;
 
   @override
@@ -44,6 +47,9 @@ class _RetailAddPageState extends State<RetailAddPage> {
       }
 
       if (widget.item == null) {
+        data['latitude'] = latitude;
+        data['longitude'] = longitude;
+
         await ApiService().post('/form_action', data, context: context);
       } else {
         data['id'] = widget.item!.id;
@@ -85,6 +91,14 @@ class _RetailAddPageState extends State<RetailAddPage> {
                   controller: address,
                   required: false,
                 ),
+                const SizedBox(height: 30),
+                if (widget.item == null)
+                  GeoWidget(
+                    onChanged: (value) {
+                      latitude = value.latitude;
+                      longitude = value.longitude;
+                    },
+                  ),
                 const SizedBox(height: 30),
                 ZButton(
                   text: 'Submit',
