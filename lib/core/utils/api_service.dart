@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'store.dart';
+
 class ApiService {
   static ApiService? _instance;
 
@@ -67,6 +69,7 @@ class ApiService {
 
   void setToken(String token) {
     _dio.options.headers['token'] = token;
+    Store().setToken(token);
   }
 
   Future<void> refreshToken() async {

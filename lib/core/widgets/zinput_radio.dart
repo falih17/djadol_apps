@@ -69,8 +69,8 @@ class ButtonOption extends StatelessWidget {
         // width: double.infinity,
         padding: const EdgeInsets.all(5),
         margin: const EdgeInsets.all(10),
-        // height: 30,
-        width: 100,
+        height: 50,
+        width: 170,
         decoration: BoxDecoration(
           color: (selected) ? Colors.orange : Colors.grey,
           borderRadius: BorderRadius.circular(8.0),

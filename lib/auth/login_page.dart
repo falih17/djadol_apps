@@ -82,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final r = await ApiService().post('/auth/login', body, context: context);
       ApiService().setToken(r.data['token']);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),

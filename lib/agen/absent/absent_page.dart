@@ -1,4 +1,5 @@
 import 'package:djadol_mobile/core/geo_location/geo_widget.dart';
+import 'package:djadol_mobile/core/widgets/zinput_radio.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +17,12 @@ class _AbsentPageState extends State<AbsentPage> {
   XFile? picture;
   double? latitude;
   double? longitude;
+  String tipeAbsen = 'Masuk';
+
+  List<String> options = [
+    'Masuk',
+    'Pulang',
+  ];
 
   Future<void> submit() async {
     try {
@@ -58,6 +65,18 @@ class _AbsentPageState extends State<AbsentPage> {
                     onChanged: (value) {
                       latitude = value.latitude;
                       longitude = value.longitude;
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  ZInputRadio(
+                    options: options,
+                    dropdownValue: tipeAbsen,
+                    onChanged: (v) {
+                      setState(() {
+                        tipeAbsen = v;
+                      });
                     },
                   ),
                 ],
