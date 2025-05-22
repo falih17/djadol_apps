@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:djadol_mobile/core/geo_location/geo_widget.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
@@ -60,8 +58,6 @@ class _AbsentPageState extends State<AbsentPage> {
                     onChanged: (value) {
                       latitude = value.latitude;
                       longitude = value.longitude;
-                      print(
-                          'Latitude: ${value.latitude}, Longitude: ${value.longitude}');
                     },
                   ),
                 ],

@@ -32,18 +32,4 @@ class Jurnal {
   String toString() {
     return 'Jurnal(id: $id, productId: $productId, retailId: $retailId, productIdName: $productIdName, retailIdName: $retailIdName, count: $count, price: $price)';
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Jurnal &&
-        other.id == id &&
-        other.productId == productId &&
-        other.retailId == retailId &&
-        other.productIdName == productIdName &&
-        other.retailIdName == retailIdName &&
-        other.count == count &&
-        other.price == price;
-  }
 }

@@ -42,8 +42,8 @@ class _GeoWidgetState extends State<GeoWidget> {
     return AsyncValueBuilder(
       // key: _refreshKey,
       future: location(),
-      success: (_) {
-        widget.onChanged(_);
+      success: (v) {
+        widget.onChanged(v);
         return Card(
           child: ListTile(
             title: const Text('Location'),

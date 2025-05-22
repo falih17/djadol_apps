@@ -81,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final r = await ApiService().post('/auth/login', body, context: context);
-      print(r);
       ApiService().setToken(r.data['token']);
       Navigator.pushReplacement(
         context,
