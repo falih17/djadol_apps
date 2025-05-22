@@ -116,6 +116,7 @@ class ApiService {
         data: FormData.fromMap(data),
         queryParameters: queryParameters,
       );
+      // print(response);
       return response;
     } catch (e) {
       rethrow;

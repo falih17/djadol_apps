@@ -12,6 +12,7 @@ class ZInputSelect extends StatefulWidget {
   final String vKey;
   final String vData;
   final String? id;
+  final String? vDisplay;
 
   final ValueChanged<String> onChanged;
   const ZInputSelect({
@@ -22,6 +23,7 @@ class ZInputSelect extends StatefulWidget {
     this.vKey = 'id',
     this.vData = 'name',
     this.id,
+    this.vDisplay,
   });
 
   @override
@@ -34,7 +36,7 @@ class _ZInputSelectState extends State<ZInputSelect> {
   @override
   void initState() {
     super.initState();
-    getOneData();
+    // getOneData();
   }
 
   Future<void> getOneData() async {
@@ -68,7 +70,7 @@ class _ZInputSelectState extends State<ZInputSelect> {
             child: InkWell(
               child: Row(
                 children: [
-                  Expanded(child: Text(display)),
+                  Expanded(child: Text(widget.vDisplay ?? display)),
                   const Icon(Icons.arrow_drop_down)
                 ],
               ),

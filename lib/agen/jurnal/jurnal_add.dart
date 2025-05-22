@@ -28,7 +28,10 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
   Future<void> initData() async {
     if (widget.item != null) {
-      // name.text = widget.item!.name;
+      count.text = widget.item!.count;
+      retailId = widget.item!.retailId;
+      productId = widget.item!.productId;
+      price.text = widget.item!.price;
       // address.text = widget.item!.address;
     }
   }
@@ -43,7 +46,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         'product_id': productId,
         'status': 'in',
         'agen_id': '31',
-        'company_id': '1',
       };
 
       if (widget.item == null) {
@@ -52,7 +54,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         data['id'] = widget.item!.id;
         await ApiService().post('/form_action', data, context: context);
       }
-      // Navigator.pop(context, true);
+      Navigator.pop(context, true);
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
     }
@@ -85,9 +87,8 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                 ZInputSelect(
                   label: 'Retail',
                   url: '/all/31',
-                  vData: 'name',
-                  vKey: 'id',
                   id: widget.item?.retailId,
+                  vDisplay: widget.item?.retailIdName,
                   onChanged: (v) {
                     retailId = v;
                   },
@@ -95,9 +96,8 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                 ZInputSelect(
                   label: 'Product',
                   url: '/all/30',
-                  vData: 'name',
-                  vKey: 'id',
                   id: widget.item?.productId,
+                  vDisplay: widget.item?.productIdName,
                   onChanged: (v) {
                     productId = v;
                   },

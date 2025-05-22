@@ -27,7 +27,6 @@ class _JurnalListPageState extends State<JurnalListPage> {
   Future<void> _fetchPage(int page) async {
     try {
       List result = await ApiService().getList('/all/33', page, _pageSize);
-      print(result);
       List<Jurnal> newItems = result.map((i) => Jurnal.fromMap(i)).toList();
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
