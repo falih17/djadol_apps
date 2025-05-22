@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/agen/absent/absent_page.dart';
 import 'package:djadol_mobile/core/widgets/zcard.dart';
 import 'package:flutter/material.dart';
 import 'agen/jurnal/jurnal_list.dart';
@@ -12,6 +13,14 @@ class HomePage extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          InkWell(
+            child: ZCard(title: 'Absen'),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const AbsentPage(),
+              ),
+            ),
+          ),
           InkWell(
             child: ZCard(title: 'Jurnal'),
             onTap: () => Navigator.of(context).push(

@@ -8,11 +8,13 @@ import 'zbutton.dart';
 class ZInputImage extends StatefulWidget {
   final ValueChanged<XFile?> onChanged;
   final String url;
+  final bool cameraOnly;
 
   const ZInputImage({
     super.key,
     required this.url,
     required this.onChanged,
+    this.cameraOnly = false,
   });
 
   @override
@@ -75,18 +77,22 @@ class _ZInputImageState extends State<ZInputImage> {
           ),
           Row(
             children: [
-              Flexible(
-                child: ZButton(
-                  text: 'Gallery',
-                  onPressed: () => getImage(1),
+              if (!widget.cameraOnly) ...[
+                Flexible(
+                  child: ZButton(
+                    text: 'Gallery',
+                    buttonType: ButtonType.secondary,
+                    onPressed: () => getImage(1),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                width: 40,
-              ),
+                const SizedBox(
+                  width: 40,
+                ),
+              ],
               Flexible(
                 child: ZButton(
                   text: 'Camera',
+                  buttonType: ButtonType.secondary,
                   onPressed: () => getImage(0),
                 ),
               ),

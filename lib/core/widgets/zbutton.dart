@@ -56,7 +56,7 @@ Color getButtonColor(ButtonType type) {
     case ButtonType.primary:
       return Constants.primaryColor;
     case ButtonType.secondary:
-      return Colors.white;
+      return Constants.secondary;
     default:
       return Constants.primaryColor;
   }
@@ -67,7 +67,7 @@ Color getTextColor(ButtonType type) {
     case ButtonType.primary:
       return Colors.white;
     case ButtonType.secondary:
-      return Constants.primaryColor;
+      return Colors.white;
     default:
       return Colors.white;
   }
