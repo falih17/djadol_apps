@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -29,6 +30,9 @@ class _GeoWidgetState extends State<GeoWidget> {
       Position position = await GeoLocation().getLocation();
       return AsyncValue.success(position);
     } catch (e) {
+      if (e == 'mocked') {
+        ZToast.error(context, 'Disable mock location');
+      }
       return AsyncValue.failure("Error getting location");
     }
   }

@@ -1,11 +1,19 @@
 // install geolocator: ^13.0.4
 
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GeoLocation {
   Future<Position> getLocation() async {
     Position position = await _determinePosition();
-    print(position);
+    if (!kDebugMode) {
+      if (position.isMocked) {
+        // Handle the case when the location is mocked
+        // For example, you can show a warning message to the user
+        return Future.error('mocked');
+      }
+    }
+
     return position;
   }
 

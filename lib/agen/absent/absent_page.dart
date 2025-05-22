@@ -23,8 +23,8 @@ class _AbsentPageState extends State<AbsentPage> {
     try {
       Map<String, dynamic> data = {
         'form_id': '31',
-        'absen_lattitude': '31',
-        'absen_longitude': '31',
+        'absen_lattitude': latitude,
+        'absen_longitude': longitude,
       };
       if (picture != null) {
         data.addAll({'absen_foto': multiPartFile(picture!.path)});
