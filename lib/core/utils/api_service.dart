@@ -90,20 +90,26 @@ class ApiService {
     }
   }
 
-  Future<List> getList(String url, int page, int size,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<List> getList(
+    String url,
+    int page,
+    int size, {
+    Map<String, dynamic>? data,
+  }) async {
     try {
-      final data = {
-        'page': page,
-        'perPage': size,
-        'sort': '-created',
+      String formId = url.split('/').last;
+      final dataParam = {
+        'start': page,
+        'length': size,
         'skipTotal': true,
-        ...?queryParameters,
+        'form_id': formId,
+        ...?data,
       };
-      Response response = await _dio.get(
+      Response response = await _dio.post(
         url,
-        queryParameters: data,
+        data: FormData.fromMap(dataParam),
       );
+      print(response.data);
       return response.data['data'] as List;
     } catch (e) {
       rethrow;
@@ -119,7 +125,7 @@ class ApiService {
         data: FormData.fromMap(data),
         queryParameters: queryParameters,
       );
-      // print(response);
+      print(response);
       return response;
     } catch (e) {
       rethrow;

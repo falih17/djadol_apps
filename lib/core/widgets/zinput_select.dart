@@ -1,3 +1,5 @@
+import 'package:djadol_mobile/core/widgets/zui.dart';
+
 import 'zinput_style.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -121,6 +123,8 @@ class ZInputSelectPage extends StatefulWidget {
 
 class _ZInputSelectPageState extends State<ZInputSelectPage> {
   static const _pageSize = 20;
+  String _searchTerm = '';
+
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 0);
 
@@ -130,10 +134,13 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
     _pagingController.addPageRequestListener(_fetchPage);
   }
 
-  Future<void> _fetchPage(int page) async {
+  Future<void> _fetchPage(
+    int page,
+  ) async {
     try {
+      var data = {'name': _searchTerm};
       List<dynamic> newItems =
-          await ApiService().getList(widget.url, page, _pageSize);
+          await ApiService().getList(widget.url, page, _pageSize, data: data);
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
@@ -160,11 +167,33 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: FListPage(
-          pagingController: _pagingController,
-          itemBuilder: (context, item, index) => widgetItemList(
-            item,
-          ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                textInputAction: TextInputAction.search,
+                onSubmitted: (value) {
+                  _searchTerm = value;
+                  _pagingController.refresh();
+                },
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Search ',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                ),
+              ),
+            ),
+            Expanded(
+              child: FListPage(
+                pagingController: _pagingController,
+                itemBuilder: (context, item, index) => widgetItemList(
+                  item,
+                ),
+              ),
+            ),
+          ],
         ),
       );
 }

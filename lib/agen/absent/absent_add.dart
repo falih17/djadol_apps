@@ -6,28 +6,25 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/utils/api_service.dart';
 
-class AbsentPage extends StatefulWidget {
-  const AbsentPage({super.key});
+class AbsentAddPage extends StatefulWidget {
+  final bool type;
+  const AbsentAddPage({super.key, required this.type});
 
   @override
-  State<AbsentPage> createState() => _AbsentPageState();
+  State<AbsentAddPage> createState() => _AbsentAddPageState();
 }
 
-class _AbsentPageState extends State<AbsentPage> {
+class _AbsentAddPageState extends State<AbsentAddPage> {
   XFile? picture;
   double? latitude;
   double? longitude;
-  String tipeAbsen = 'Masuk';
-
-  List<String> options = [
-    'Masuk',
-    'Pulang',
-  ];
 
   Future<void> submit() async {
     try {
+      String formId = widget.type ? '41' : '42';
+
       Map<String, dynamic> data = {
-        'form_id': '31',
+        'form_id': formId,
         'absen_lattitude': latitude,
         'absen_longitude': longitude,
       };
@@ -46,7 +43,7 @@ class _AbsentPageState extends State<AbsentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Absent'),
+        title: Text(widget.type ? 'Presensi Masuk' : ' Presensi Pulang'),
       ),
       body: SafeArea(
           child: Padding(
@@ -69,15 +66,6 @@ class _AbsentPageState extends State<AbsentPage> {
                   ),
                   SizedBox(
                     height: 20,
-                  ),
-                  ZInputRadio(
-                    options: options,
-                    dropdownValue: tipeAbsen,
-                    onChanged: (v) {
-                      setState(() {
-                        tipeAbsen = v;
-                      });
-                    },
                   ),
                 ],
               ),

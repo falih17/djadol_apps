@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:flutter/material.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
@@ -43,8 +44,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         'price': price.text,
         'retail_id': retailId,
         'product_id': productId,
-        'status': 'in',
-        'agen_id': '31',
+        'status': 'out',
       };
 
       if (widget.item == null) {
@@ -55,6 +55,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
       }
       Navigator.pop(context, true);
     } catch (e) {
+      print(e);
       ZToast.error(context, 'Sorry something wrong');
     }
   }
@@ -73,16 +74,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ZInput(
-                  label: 'Count',
-                  controller: count,
-                  required: false,
-                ),
-                ZInput(
-                  label: 'Price',
-                  controller: price,
-                  required: false,
-                ),
                 ZInputSelect(
                   label: 'Retail',
                   url: '/all/31',
@@ -90,6 +81,17 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   vDisplay: widget.item?.retailIdName,
                   onChanged: (v) {
                     retailId = v;
+                  },
+                ),
+                ZButton(
+                  text: 'Tambah Retail Baru',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RetailAddPage(),
+                      ),
+                    );
                   },
                 ),
                 ZInputSelect(
@@ -100,6 +102,16 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   onChanged: (v) {
                     productId = v;
                   },
+                ),
+                ZInput(
+                  label: 'Jumlah',
+                  controller: count,
+                  required: false,
+                ),
+                ZInput(
+                  label: 'Harga',
+                  controller: price,
+                  required: false,
                 ),
                 const SizedBox(height: 30),
                 ZButton(
