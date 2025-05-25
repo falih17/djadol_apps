@@ -16,7 +16,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController count = TextEditingController();
-  TextEditingController price = TextEditingController();
   String retailId = '';
   String productId = '';
 
@@ -31,7 +30,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
       count.text = widget.item!.count;
       retailId = widget.item!.retailId;
       productId = widget.item!.productId;
-      price.text = widget.item!.price;
       // address.text = widget.item!.address;
     }
   }
@@ -41,7 +39,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
       Map<String, dynamic> data = {
         'form_id': '33',
         'count': count.text,
-        'price': price.text,
         'retail_id': retailId,
         'product_id': productId,
         'status': 'out',
@@ -106,11 +103,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                 ZInput(
                   label: 'Jumlah',
                   controller: count,
-                  required: false,
-                ),
-                ZInput(
-                  label: 'Harga',
-                  controller: price,
                   required: false,
                 ),
                 const SizedBox(height: 30),

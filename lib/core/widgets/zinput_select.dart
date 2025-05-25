@@ -1,12 +1,11 @@
-import 'package:djadol_mobile/core/widgets/zui.dart';
-
+import 'zcard.dart';
+import 'zinput_search.dart';
 import 'zinput_style.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../utils/api_service.dart';
 import 'flist_page.dart';
-import 'zcard.dart';
 
 class ZInputSelect extends StatefulWidget {
   final String? label;
@@ -171,18 +170,11 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                textInputAction: TextInputAction.search,
-                onSubmitted: (value) {
+              child: ZInputSearch(
+                onChanged: (value) {
                   _searchTerm = value;
                   _pagingController.refresh();
                 },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Search ',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                ),
               ),
             ),
             Expanded(

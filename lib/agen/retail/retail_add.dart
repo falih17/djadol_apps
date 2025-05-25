@@ -89,6 +89,7 @@ class _RetailAddPageState extends State<RetailAddPage> {
                 ZInput(
                   label: 'Address',
                   controller: address,
+                  maxLines: 5,
                   required: false,
                 ),
                 const SizedBox(height: 30),

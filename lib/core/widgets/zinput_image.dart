@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:djadol_mobile/core/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,18 +28,21 @@ class _ZInputImageState extends State<ZInputImage> {
 
   Future getImage(int i) async {
     final XFile? image;
-
-    if (i == 1) {
-      image = await _picker.pickImage(
-          source: ImageSource.gallery, maxHeight: 1200, maxWidth: 1200);
-    } else {
-      image = await _picker.pickImage(
-          source: ImageSource.camera, maxHeight: 1200, maxWidth: 1200);
+    try {
+      if (i == 1) {
+        image = await _picker.pickImage(
+            source: ImageSource.gallery, maxHeight: 1024, maxWidth: 1024);
+      } else {
+        image = await _picker.pickImage(
+            source: ImageSource.camera, maxHeight: 1024, maxWidth: 1024);
+      }
+      setState(() {
+        _image = image;
+      });
+      widget.onChanged(_image);
+    } catch (e) {
+      zprint(e);
     }
-    setState(() {
-      _image = image;
-    });
-    widget.onChanged(_image);
   }
 
   @override

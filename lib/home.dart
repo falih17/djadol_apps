@@ -66,7 +66,7 @@ class HomePage extends StatelessWidget {
                         Flexible(
                           child: MenuCardVertical(
                             icon: Icons.gps_off,
-                            title: 'Keluar',
+                            title: 'Pulang',
                             gradient: [
                               Colors.red.shade500,
                               Colors.orange.shade300,

@@ -55,7 +55,10 @@ class _AbsentListPageState extends State<AbsentListPage> {
           delete(i.id);
         }
       },
-      child: ZCard(title: i.createdAt),
+      child: ZCard(
+        title: i.createdAt,
+        icon: Icons.gps_fixed,
+      ),
     );
   }
 

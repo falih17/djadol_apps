@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'zinput_style.dart';
 
 String? requiredValidation(String? value) {
@@ -32,20 +33,22 @@ class ZInput extends StatelessWidget {
   final Icon? suffixIcon;
   final Icon? prefixIcon;
   final double borderRadius;
+  final int maxLines;
   final String? Function(String?)? validator;
 
   const ZInput({
     super.key,
+    this.controller,
+    this.label,
     this.hintText = 'Input Text Here',
+    this.onTap,
+    this.required = false,
     this.obscureText = false,
     this.suffixIcon,
     this.prefixIcon,
     this.borderRadius = 8.0,
-    this.controller,
+    this.maxLines = 1,
     this.validator,
-    this.label,
-    this.onTap,
-    this.required = false,
   });
 
   const ZInput.password({
@@ -59,6 +62,7 @@ class ZInput extends StatelessWidget {
     this.validator,
     this.label,
     this.onTap,
+    this.maxLines = 1,
     this.required = false,
   });
 
@@ -73,6 +77,7 @@ class ZInput extends StatelessWidget {
     this.validator = emailValidation,
     this.label,
     this.onTap,
+    this.maxLines = 1,
     this.required = false,
   });
 
@@ -87,6 +92,7 @@ class ZInput extends StatelessWidget {
     this.validator = numberValidation,
     this.label,
     this.onTap,
+    this.maxLines = 1,
     this.required = false,
   });
 
@@ -101,6 +107,7 @@ class ZInput extends StatelessWidget {
     this.validator = numberValidation,
     this.label,
     this.onTap,
+    this.maxLines = 1,
     this.required = false,
   });
 
@@ -131,6 +138,7 @@ class ZInput extends StatelessWidget {
             validator: (required) ? requiredValidation : validator,
             controller: controller,
             obscureText: obscureText,
+            maxLines: maxLines,
             decoration: InputDecoration(
               prefixIcon: prefixIcon,
               prefixIconConstraints: const BoxConstraints(minWidth: 0.0),

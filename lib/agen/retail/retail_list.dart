@@ -17,6 +17,8 @@ class _RetailListPageState extends State<RetailListPage> {
   static const _pageSize = 20;
   final PagingController<int, Retail> _pagingController =
       PagingController(firstPageKey: 0);
+  String _searchTerm = '';
+  bool _searchState = false;
 
   @override
   void initState() {
@@ -26,7 +28,13 @@ class _RetailListPageState extends State<RetailListPage> {
 
   Future<void> _fetchPage(int page) async {
     try {
-      List result = await ApiService().getList('/all/31', page, _pageSize);
+      Map<String, dynamic> params = {
+        'page': page,
+        'size': _pageSize,
+        'name': _searchTerm
+      };
+      List result =
+          await ApiService().getList('/all/31', page, _pageSize, data: params);
       List<Retail> newItems = result.map((i) => Retail.fromMap(i)).toList();
       final isLastPage = newItems.length < _pageSize;
       if (isLastPage) {
@@ -62,7 +70,21 @@ class _RetailListPageState extends State<RetailListPage> {
           delete(i.id);
         }
       },
-      child: ZCard(title: i.name),
+      child: ProductCard(
+        name: i.name,
+        description: i.address,
+        imageUrl: i.picture,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RetailAddPage(item: i),
+            ),
+          ).then((v) {
+            if (v != null) _pagingController.refresh();
+          });
+        },
+      ),
     );
   }
 
@@ -70,12 +92,39 @@ class _RetailListPageState extends State<RetailListPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Retail'),
+          actions: [
+            IconButton(
+              icon: Icon(
+                  _searchState ? Icons.filter_list_off : Icons.filter_list),
+              onPressed: () {
+                setState(() {
+                  _searchState = !_searchState;
+                });
+              },
+            ),
+          ],
         ),
-        body: FListPage(
-          pagingController: _pagingController,
-          itemBuilder: (context, item, index) => widgetItemList(
-            item,
-          ),
+        body: Column(
+          children: [
+            if (_searchState)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ZInputSearch(
+                  onChanged: (value) {
+                    _searchTerm = value;
+                    _pagingController.refresh();
+                  },
+                ),
+              ),
+            Expanded(
+              child: FListPage(
+                pagingController: _pagingController,
+                itemBuilder: (context, item, index) => widgetItemList(
+                  item,
+                ),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
