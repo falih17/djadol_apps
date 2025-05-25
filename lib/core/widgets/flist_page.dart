@@ -10,13 +10,18 @@ class FListPage<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, T>(
-      pagingController: pagingController,
-      builderDelegate: PagedChildBuilderDelegate<T>(
-        firstPageErrorIndicatorBuilder: (_) => ConnectionFailed(
-          onPressed: pagingController.refresh,
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(
+        () => pagingController.refresh(),
+      ),
+      child: PagedListView<int, T>(
+        pagingController: pagingController,
+        builderDelegate: PagedChildBuilderDelegate<T>(
+          firstPageErrorIndicatorBuilder: (_) => ConnectionFailed(
+            onPressed: pagingController.refresh,
+          ),
+          itemBuilder: itemBuilder,
         ),
-        itemBuilder: itemBuilder,
       ),
     );
   }

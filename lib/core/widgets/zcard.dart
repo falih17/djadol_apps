@@ -43,6 +43,7 @@ class ProductCard extends StatelessWidget {
   final String description;
   final String imageUrl;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   const ProductCard({
     super.key,
@@ -50,12 +51,14 @@ class ProductCard extends StatelessWidget {
     required this.description,
     required this.imageUrl,
     required this.onTap,
+    this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 6,

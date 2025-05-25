@@ -54,7 +54,10 @@ class _RetailListPageState extends State<RetailListPage> {
   }
 
   Widget widgetItemList(Retail i) {
-    return InkWell(
+    return ProductCard(
+      name: i.name,
+      description: i.address,
+      imageUrl: i.picture,
       onTap: () {
         Navigator.push(
           context,
@@ -70,22 +73,13 @@ class _RetailListPageState extends State<RetailListPage> {
           delete(i.id);
         }
       },
-      child: ProductCard(
-        name: i.name,
-        description: i.address,
-        imageUrl: i.picture,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RetailAddPage(item: i),
-            ),
-          ).then((v) {
-            if (v != null) _pagingController.refresh();
-          });
-        },
-      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
   @override
