@@ -101,7 +101,8 @@ class ApiService {
       final dataParam = {
         'page': page,
         'length': size,
-        'skipTotal': true,
+        'order[0][column]': 0,
+        'order[0][dir]': 'desc',
         'form_id': formId,
         ...?data,
       };

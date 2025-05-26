@@ -1,0 +1,34 @@
+{
+    "git.confirmSync": false,
+    "editor.formatOnSave": true,
+    "editor.guides.bracketPairs": true,
+    "dart.renameFilesWithClasses": "prompt",
+    "dart.flutterCreateOrganization": "com.kopicode",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "explorer.fileNesting.patterns": {
+        "pubspec.yaml": ".metadata, pubspec.lock, analysis_options.yaml",
+    },
+    "dart.lineLength": 80,
+    "workbench.editor.editorActionsLocation": "titleBar",
+    "dart_data_class_generator.fromJson.enabled": false,
+    "workbench.preferredLightColorTheme": "Default Light+",
+    "workbench.colorTheme": "Default Light+",
+    "window.autoDetectColorScheme": true,
+    "dart_data_class_generator.fromMap.default_values": true,
+    "dart.flutterSdkPath": ".fvm/versions/stable",
+    "dart_data_class_generator.hashCode.enabled": false,
+    "dart_data_class_generator.copyWith.enabled": false,
+    "dart-data-class-generator.json.key_format": "snake_case",
+    "dart-data-class-generator.copyWith.enabled": false,
+    "dart-data-class-generator.hashCode.enabled": false,
+    "dart-data-class-generator.toJson.enabled": false,
+    "dart-data-class-generator.toMap.enabled": false,
+    "dart_data_class_generator.toJson.enabled": false,
+    "dart_data_class_generator.toMap.enabled": false,
+    "dart-data-class-generator.fromJson.enabled": false,
+    "dart-data-class-generator.equality.enabled": false
+}
