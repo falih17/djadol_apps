@@ -1,17 +1,24 @@
+import 'package:djadol_mobile/agen/jurnal/product_model.dart';
 import 'package:flutter/material.dart';
+import '../../core/utils/ext_currency.dart';
 
 class CartItem {
-  String name;
   int quantity;
-  int price;
+  Product product;
 
   CartItem({
-    required this.name,
     required this.quantity,
-    required this.price,
+    required this.product,
   });
 
-  int get subtotal => quantity * price;
+  int get subtotal => quantity * product.priceSale;
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": product.name,
+      "id": product.id,
+    };
+  }
 }
 
 class ProductItem extends StatelessWidget {
@@ -56,7 +63,8 @@ class ProductItem extends StatelessWidget {
                   SizedBox(height: 4),
                   Row(
                     children: [
-                      Text('Harga: ${price.toString()}'),
+                      Text('Harga: ${price.toString().toCurrency()}',
+                          style: TextStyle(fontWeight: FontWeight.w500)),
                       Spacer(),
                       IconButton(
                         icon: Icon(Icons.remove),
@@ -75,7 +83,7 @@ class ProductItem extends StatelessWidget {
                   Row(
                     children: [
                       Spacer(),
-                      Text('Subtotal: ${subtotal.toString()}',
+                      Text('Subtotal: ${subtotal.toString().toCurrency()}',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                     ],
                   ),

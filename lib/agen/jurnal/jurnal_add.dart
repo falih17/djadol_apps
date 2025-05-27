@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:djadol_mobile/agen/retail/retail_add.dart';
 
-import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'cart_page.dart';
 import 'product_model.dart';
@@ -20,29 +21,18 @@ class JurnalAddPage extends StatefulWidget {
 class _JurnalAddPageState extends State<JurnalAddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController count = TextEditingController();
   String retailId = '';
   String productId = '';
 
   @override
   void initState() {
-    initData();
     super.initState();
-  }
-
-  Future<void> initData() async {
-    if (widget.item != null) {
-      count.text = widget.item!.count;
-      retailId = widget.item!.retailId;
-      productId = widget.item!.productId;
-      // address.text = widget.item!.address;
-    }
   }
 
   List<CartItem> cartItems = [];
   void addItem(Product item) {
     setState(() {
-      cartItems.add(CartItem(name: item.name, quantity: 1, price: 1000));
+      cartItems.add(CartItem(product: item, quantity: 1));
     });
   }
 
@@ -61,26 +51,28 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
     });
   }
 
-  int get totalPrice =>
-      cartItems.fold(0, (sum, item) => sum + (item.quantity * item.price));
+  int get totalPrice => cartItems.fold(
+      0, (sum, item) => sum + (item.quantity * item.product.priceSale));
 
   Future<void> submit() async {
     try {
       Map<String, dynamic> data = {
         'form_id': '33',
-        'count': count.text,
         'retail_id': retailId,
         'product_id': productId,
         'status': 'out',
+        'detail': jsonEncode(cartItems),
       };
 
-      if (widget.item == null) {
-        await ApiService().post('/form_action', data, context: context);
-      } else {
-        data['id'] = widget.item!.id;
-        await ApiService().post('/form_action', data, context: context);
-      }
-      Navigator.pop(context, true);
+      print(data);
+
+      // if (widget.item == null) {
+      //   await ApiService().post('/form_action', data, context: context);
+      // } else {
+      //   data['id'] = widget.item!.id;
+      //   await ApiService().post('/form_action', data, context: context);
+      // }
+      // Navigator.pop(context, true);
     } catch (e) {
       print(e);
       ZToast.error(context, 'Sorry something wrong');
@@ -185,9 +177,9 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                         itemBuilder: (context, index) {
                           final item = cartItems[index];
                           return ProductItem(
-                            name: item.name,
+                            name: item.product.name,
                             quantity: item.quantity,
-                            price: item.price,
+                            price: item.product.priceSale,
                             subtotal: item.subtotal,
                             onAdd: () => updateQuantity(index, 1),
                             onMinus: () => updateQuantity(index, -1),
