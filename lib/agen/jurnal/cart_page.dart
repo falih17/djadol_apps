@@ -1,4 +1,5 @@
 import 'package:djadol_mobile/agen/jurnal/product_model.dart';
+import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import '../../core/utils/ext_currency.dart';
 
@@ -44,6 +45,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Padding(
         padding: EdgeInsets.all(12),
@@ -63,11 +65,12 @@ class ProductItem extends StatelessWidget {
                   SizedBox(height: 4),
                   Row(
                     children: [
-                      Text('Harga: ${price.toString().toCurrency()}',
+                      Text('Rp ${price.toString().toCurrency()}',
                           style: TextStyle(fontWeight: FontWeight.w500)),
                       Spacer(),
                       IconButton(
                         icon: Icon(Icons.remove),
+                        color: Colors.red,
                         onPressed: onMinus,
                       ),
                       Text('$quantity',
@@ -75,6 +78,7 @@ class ProductItem extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.bold)),
                       IconButton(
                         icon: Icon(Icons.add),
+                        color: Colors.green,
                         onPressed: onAdd,
                       ),
                     ],

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 
 import 'package:djadol_mobile/agen/retail/retail_add.dart';
 
+import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'cart_page.dart';
 import 'product_model.dart';
@@ -23,6 +25,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
   String retailId = '';
   String productId = '';
+  bool newRetail = false;
 
   @override
   void initState() {
@@ -59,20 +62,13 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
       Map<String, dynamic> data = {
         'form_id': '33',
         'retail_id': retailId,
-        'product_id': productId,
+        'product_id': '1',
         'status': 'out',
         'detail': jsonEncode(cartItems),
       };
 
       print(data);
-
-      // if (widget.item == null) {
-      //   await ApiService().post('/form_action', data, context: context);
-      // } else {
-      //   data['id'] = widget.item!.id;
-      //   await ApiService().post('/form_action', data, context: context);
-      // }
-      // Navigator.pop(context, true);
+      await ApiService().post('/form_action', data, context: context);
     } catch (e) {
       print(e);
       ZToast.error(context, 'Sorry something wrong');
@@ -96,12 +92,19 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      ZInputSwitch(
+                          label: "Toko Baru",
+                          value: newRetail,
+                          onChanged: (v) {
+                            setState(() {
+                              newRetail = v;
+                            });
+                          }),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Expanded(
                             child: ZInputSelect(
-                              label: 'Retail',
                               url: '/all/31',
                               id: widget.item?.retailId,
                               vDisplay: widget.item?.retailIdName,
@@ -111,7 +114,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                             ),
                           ),
                           SizedBox(width: 10),
-                          ElevatedButton(
+                          ZIconButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -120,54 +123,24 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                                 ),
                               );
                             },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // Set the radius here
-                              ),
-                            ),
-                            child: Icon(Icons.add),
                           ),
-                          // ZButton(
-                          //   text: '+',
-                          //   onPressed: () {
-                          //     Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => const CartPage(),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
                         ],
                       ),
 
                       const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Text('Produk'),
-                          Spacer(),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProductListPage()),
-                              ).then((value) {
-                                if (value != null) {
-                                  addItem(value as Product);
-                                }
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20), // Set the radius here
-                              ),
-                            ),
-                            child: Icon(Icons.add),
-                          ),
-                        ],
+                      ZButton(
+                        text: 'Tambah Produk',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductListPage()),
+                          ).then((value) {
+                            if (value != null) {
+                              addItem(value as Product);
+                            }
+                          });
+                        },
                       ),
 
                       ListView.builder(
@@ -216,7 +189,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                     Text('Total:',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
-                    Text(totalPrice.toString(),
+                    Text(totalPrice.toString().toCurrency(),
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                   ],

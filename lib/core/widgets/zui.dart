@@ -10,6 +10,7 @@ export 'ztoast.dart';
 export 'zalert.dart';
 export 'zinput_search.dart';
 export 'zinput_style.dart';
+export 'zicon_button.dart';
 export '../utils/helper.dart';
 
 export '../utils/constans.dart';

@@ -15,29 +15,31 @@ class JurnalListPage extends StatefulWidget {
 
 class _JurnalListPageState extends State<JurnalListPage> {
   static const _pageSize = 20;
-  final PagingController<int, Jurnal> _pagingController =
-      PagingController(firstPageKey: 0);
+  late final _pagingController = PagingController<int, dynamic>(
+    getNextPageKey: (state) {
+      final keys = state.keys;
+      final pages = state.pages;
+      if (keys == null) return 0;
+      if (pages != null && pages.last.length < _pageSize) return null;
+      return keys.last + 1;
+    },
+    fetchPage: (pageKey) => fetchPage(pageKey),
+  );
 
   @override
   void initState() {
     super.initState();
-    _pagingController.addPageRequestListener(_fetchPage);
   }
 
-  Future<void> _fetchPage(int page) async {
+  Future<List<Jurnal>> fetchPage(int page) async {
     try {
       List result = await ApiService().getList('/all/33', page, _pageSize);
       List<Jurnal> newItems = result.map((i) => Jurnal.fromMap(i)).toList();
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        _pagingController.appendPage(newItems, ++page);
-      }
+      return newItems;
     } catch (error) {
       debugPrint(error.toString());
-      _pagingController.error = error;
     }
+    return [];
   }
 
   Future<void> delete(String id) async {

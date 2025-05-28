@@ -5,8 +5,12 @@ import '../pages/connection_failed.dart';
 class FListPage<T> extends StatelessWidget {
   final PagingController<int, T> pagingController;
   final Widget Function(BuildContext, T, int) itemBuilder;
-  const FListPage(
-      {super.key, required this.pagingController, required this.itemBuilder});
+
+  const FListPage({
+    super.key,
+    required this.pagingController,
+    required this.itemBuilder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +18,17 @@ class FListPage<T> extends StatelessWidget {
       onRefresh: () => Future.sync(
         () => pagingController.refresh(),
       ),
-      child: PagedListView<int, T>(
-        pagingController: pagingController,
-        builderDelegate: PagedChildBuilderDelegate<T>(
-          firstPageErrorIndicatorBuilder: (_) => ConnectionFailed(
-            onPressed: pagingController.refresh,
+      child: PagingListener(
+        controller: pagingController,
+        builder: (context, state, fetchNextPage) => PagedListView<int, T>(
+          state: state,
+          fetchNextPage: fetchNextPage,
+          builderDelegate: PagedChildBuilderDelegate<T>(
+            firstPageErrorIndicatorBuilder: (_) => ConnectionFailed(
+              onPressed: pagingController.refresh,
+            ),
+            itemBuilder: itemBuilder,
           ),
-          itemBuilder: itemBuilder,
         ),
       ),
     );

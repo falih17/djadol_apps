@@ -18,7 +18,7 @@ class ZInputSelect extends StatefulWidget {
   final ValueChanged<String> onChanged;
   const ZInputSelect({
     super.key,
-    required this.label,
+    this.label,
     required this.url,
     required this.onChanged,
     this.vKey = 'id',
@@ -124,32 +124,34 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
   static const _pageSize = 20;
   String _searchTerm = '';
 
-  final PagingController<int, dynamic> _pagingController =
-      PagingController(firstPageKey: 0);
+  late final _pagingController = PagingController<int, dynamic>(
+    getNextPageKey: (state) {
+      final keys = state.keys;
+      final pages = state.pages;
+      if (keys == null) return 0;
+      if (pages != null && pages.last.length < _pageSize) return null;
+      return keys.last + 1;
+    },
+    fetchPage: (pageKey) => fetchPage(pageKey),
+  );
 
   @override
   void initState() {
     super.initState();
-    _pagingController.addPageRequestListener(_fetchPage);
   }
 
-  Future<void> _fetchPage(
+  Future<List<dynamic>> fetchPage(
     int page,
   ) async {
     try {
       var data = {'name': _searchTerm};
       List<dynamic> newItems =
           await ApiService().getList(widget.url, page, _pageSize, data: data);
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        _pagingController.appendPage(newItems, ++page);
-      }
+      return newItems;
     } catch (error) {
       debugPrint(error.toString());
-      _pagingController.error = error;
     }
+    return [];
   }
 
   Widget widgetItemList(Map i) {

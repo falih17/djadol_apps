@@ -47,39 +47,39 @@ class HomePage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(
-                          child: MenuCardVertical(
-                            icon: Icons.gps_fixed,
-                            title: 'Masuk',
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const AbsentListPage(
-                                  type: true,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Flexible(
+                        //   child: MenuCardVertical(
+                        //     icon: Icons.gps_fixed,
+                        //     title: 'Masuk',
+                        //     onTap: () => Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const AbsentListPage(
+                        //           type: true,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(
                           width: 20,
                         ),
-                        Flexible(
-                          child: MenuCardVertical(
-                            icon: Icons.gps_off,
-                            title: 'Pulang',
-                            gradient: [
-                              Colors.red.shade500,
-                              Colors.orange.shade300,
-                            ],
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const AbsentListPage(
-                                  type: false,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Flexible(
+                        //   child: MenuCardVertical(
+                        //     icon: Icons.gps_off,
+                        //     title: 'Pulang',
+                        //     gradient: [
+                        //       Colors.red.shade500,
+                        //       Colors.orange.shade300,
+                        //     ],
+                        //     onTap: () => Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const AbsentListPage(
+                        //           type: false,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     Padding(

@@ -16,29 +16,39 @@ class ProductListPage extends StatefulWidget {
 
 class _ProductListPageState extends State<ProductListPage> {
   static const _pageSize = 20;
-  final PagingController<int, Product> _pagingController =
-      PagingController(firstPageKey: 0);
+  String _searchTerm = '';
+
+  late final _pagingController = PagingController<int, dynamic>(
+    getNextPageKey: (state) {
+      final keys = state.keys;
+      final pages = state.pages;
+      if (keys == null) return 0;
+      if (pages != null && pages.last.length < _pageSize) return null;
+      return keys.last + 1;
+    },
+    fetchPage: (pageKey) => fetchPage(pageKey),
+  );
 
   @override
   void initState() {
     super.initState();
-    _pagingController.addPageRequestListener(_fetchPage);
   }
 
-  Future<void> _fetchPage(int page) async {
+  Future<List<Product>> fetchPage(int page) async {
     try {
-      List result = await ApiService().getList('/all/30', page, _pageSize);
+      Map<String, dynamic> params = {
+        'page': page,
+        'size': _pageSize,
+        'name': _searchTerm
+      };
+      List result =
+          await ApiService().getList('/all/30', page, _pageSize, data: params);
       List<Product> newItems = result.map((i) => Product.fromMap(i)).toList();
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        _pagingController.appendPage(newItems, ++page);
-      }
+      return newItems;
     } catch (error) {
       debugPrint(error.toString());
-      _pagingController.error = error;
     }
+    return [];
   }
 
   Future<void> delete(String id) async {
@@ -71,11 +81,26 @@ class _ProductListPageState extends State<ProductListPage> {
         appBar: AppBar(
           title: const Text('Product'),
         ),
-        body: FListPage(
-          pagingController: _pagingController,
-          itemBuilder: (context, item, index) => widgetItemList(
-            item,
-          ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ZInputSearch(
+                onChanged: (value) {
+                  _searchTerm = value;
+                  _pagingController.refresh();
+                },
+              ),
+            ),
+            Expanded(
+              child: FListPage(
+                pagingController: _pagingController,
+                itemBuilder: (context, item, index) => widgetItemList(
+                  item,
+                ),
+              ),
+            ),
+          ],
         ),
       );
 }
