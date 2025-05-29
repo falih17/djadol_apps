@@ -43,6 +43,17 @@ class JurnalDetailPage extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     )),
+                Image.network(
+                  value.photo,
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Icon(
+                    Icons.image,
+                    color: Colors.grey,
+                    size: 100,
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Expanded(
                   child: ListView.builder(
@@ -60,6 +71,31 @@ class JurnalDetailPage extends StatelessWidget {
                     },
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total: ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        value.total.toString().toCurrency(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                )
               ],
             ),
           );

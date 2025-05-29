@@ -17,6 +17,10 @@ class Jurnal {
     this.detail = const [],
   });
 
+  get total {
+    return detail.fold(0, (sum, item) => sum + (item.count * item.price));
+  }
+
   factory Jurnal.fromMap(Map<String, dynamic> map) {
     return Jurnal(
       id: map['id'] ?? '',
