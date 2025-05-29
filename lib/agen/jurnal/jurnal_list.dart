@@ -34,12 +34,11 @@ class _JurnalListPageState extends State<JurnalListPage> {
   Future<List<Jurnal>> fetchPage(int page) async {
     try {
       List result = await ApiService().getList('/all/33', page, _pageSize);
-      List<Jurnal> newItems = result.map((i) => Jurnal.fromMap(i)).toList();
-      return newItems;
-    } catch (error) {
-      debugPrint(error.toString());
+      return result.map((i) => Jurnal.fromMap(i)).toList();
+    } catch (error, s) {
+      debugPrint(s.toString());
+      throw Exception('Failed to fetch data');
     }
-    return [];
   }
 
   Future<void> delete(String id) async {
@@ -92,13 +91,6 @@ class _JurnalListPageState extends State<JurnalListPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // showModalBottomSheet(
-            //   context: context,
-            //   clipBehavior: Clip.antiAliasWithSaveLayer,
-            //   builder: (BuildContext context) {
-            //     return const JurnalAddPage();
-            //   },
-            // )
             Navigator.push(
               context,
               MaterialPageRoute(

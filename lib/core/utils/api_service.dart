@@ -110,7 +110,6 @@ class ApiService {
         url,
         data: FormData.fromMap(dataParam),
       );
-      print(response.data);
       return response.data['data'] as List;
     } catch (e) {
       rethrow;
@@ -126,9 +125,9 @@ class ApiService {
         data: FormData.fromMap(data),
         queryParameters: queryParameters,
       );
-      print(response);
       return response;
     } catch (e) {
+      debugPrint('Error fetching list: $data');
       rethrow;
     } finally {
       if (context != null) LoadingScreen.instance.hide(context);

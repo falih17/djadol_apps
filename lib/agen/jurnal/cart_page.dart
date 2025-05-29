@@ -1,5 +1,4 @@
 import 'package:djadol_mobile/agen/jurnal/product_model.dart';
-import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import '../../core/utils/ext_currency.dart';
 
@@ -16,8 +15,12 @@ class CartItem {
 
   Map<String, dynamic> toJson() {
     return {
-      "name": product.name,
-      "id": product.id,
+      "product_name": product.name,
+      "product_id": product.id,
+      "count": quantity,
+      "price": product.priceSale,
+      "subtotal": subtotal * -1,
+      "status": 'out',
     };
   }
 }

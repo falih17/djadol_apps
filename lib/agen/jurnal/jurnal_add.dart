@@ -5,7 +5,9 @@ import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 
 import 'package:djadol_mobile/agen/retail/retail_add.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../core/geo_location/geo_widget.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'cart_page.dart';
@@ -24,8 +26,10 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String retailId = '';
-  String productId = '';
   bool newRetail = false;
+  XFile? picture;
+  double? latitude;
+  double? longitude;
 
   @override
   void initState() {
@@ -60,17 +64,18 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   Future<void> submit() async {
     try {
       Map<String, dynamic> data = {
-        'form_id': '33',
         'retail_id': retailId,
-        'product_id': '1',
         'status': 'out',
+        'latlong': '$latitude,$longitude',
         'detail': jsonEncode(cartItems),
       };
+      if (picture != null) {
+        data.addAll({'photo': multiPartFile(picture!.path)});
+      }
 
+      await ApiService().post('/bulk/form_action/20', data, context: context);
       print(data);
-      await ApiService().post('/form_action', data, context: context);
     } catch (e) {
-      print(e);
       ZToast.error(context, 'Sorry something wrong');
     }
   }
@@ -92,6 +97,11 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      ZInputImage(
+                        onChanged: (value) => picture = value,
+                        url: '',
+                        cameraOnly: false,
+                      ),
                       ZInputSwitch(
                           label: "Toko Baru",
                           value: newRetail,
@@ -125,6 +135,12 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                             },
                           ),
                         ],
+                      ),
+                      GeoWidget(
+                        onChanged: (value) {
+                          latitude = value.latitude;
+                          longitude = value.longitude;
+                        },
                       ),
 
                       const SizedBox(height: 20),

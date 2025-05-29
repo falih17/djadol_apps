@@ -1,5 +1,4 @@
 import 'package:djadol_mobile/core/geo_location/geo_widget.dart';
-import 'package:djadol_mobile/core/widgets/zinput_radio.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

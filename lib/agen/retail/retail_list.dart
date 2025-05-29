@@ -38,12 +38,11 @@ class _RetailListPageState extends State<RetailListPage> {
       Map<String, dynamic> params = {'name': _searchTerm};
       List result =
           await ApiService().getList('/all/31', page, _pageSize, data: params);
-      List<Retail> newItems = result.map((i) => Retail.fromMap(i)).toList();
-      return newItems;
-    } catch (error) {
-      debugPrint(error.toString());
+      return result.map((i) => Retail.fromMap(i)).toList();
+    } catch (error, s) {
+      debugPrint(s.toString());
+      throw Exception('Failed to fetch data');
     }
-    return [];
   }
 
   Future<void> delete(String id) async {

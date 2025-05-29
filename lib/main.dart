@@ -20,7 +20,6 @@ class MainApp extends StatelessWidget {
   Future<String?> checkToken() async {
     await Future.delayed(const Duration(milliseconds: 1000));
     await Store().init();
-    print(Store().token);
     return Store().token;
   }
 

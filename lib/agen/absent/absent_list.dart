@@ -36,12 +36,11 @@ class _AbsentListPageState extends State<AbsentListPage> {
     try {
       String formId = widget.type ? '41' : '42';
       List result = await ApiService().getList('/all/$formId', page, _pageSize);
-      List<Absent> newItems = result.map((i) => Absent.fromMap(i)).toList();
-      return newItems;
-    } catch (error) {
-      debugPrint(error.toString());
+      return result.map((i) => Absent.fromMap(i)).toList();
+    } catch (error, s) {
+      debugPrint(s.toString());
+      throw Exception('Failed to fetch data');
     }
-    return [];
   }
 
   Future<void> delete(String id) async {
@@ -77,13 +76,6 @@ class _AbsentListPageState extends State<AbsentListPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // showModalBottomSheet(
-            //   context: context,
-            //   clipBehavior: Clip.antiAliasWithSaveLayer,
-            //   builder: (BuildContext context) {
-            //     return const AbsentAddPage();
-            //   },
-            // )
             Navigator.push(
               context,
               MaterialPageRoute(
