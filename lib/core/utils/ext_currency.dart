@@ -12,4 +12,8 @@ extension StringFormatter on String {
 
     return val;
   }
+
+  int toInt() {
+    return int.parse(this);
+  }
 }

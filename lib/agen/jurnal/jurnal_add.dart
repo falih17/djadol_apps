@@ -15,8 +15,7 @@ import 'product_model.dart';
 import 'jurnal.dart';
 
 class JurnalAddPage extends StatefulWidget {
-  final Jurnal? item;
-  const JurnalAddPage({super.key, this.item});
+  const JurnalAddPage({super.key});
 
   @override
   State<JurnalAddPage> createState() => _JurnalAddPageState();
@@ -116,8 +115,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                           Expanded(
                             child: ZInputSelect(
                               url: '/all/31',
-                              id: widget.item?.retailId,
-                              vDisplay: widget.item?.retailIdName,
                               onChanged: (v) {
                                 retailId = v;
                               },

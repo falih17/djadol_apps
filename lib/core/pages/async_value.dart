@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'error_page.dart';
 
-class AsyncValueBuilder<T> extends StatelessWidget {
-  const AsyncValueBuilder({
+class ZPageFuture<T> extends StatelessWidget {
+  const ZPageFuture({
     super.key,
     required this.future,
     this.loading,
@@ -22,8 +22,9 @@ class AsyncValueBuilder<T> extends StatelessWidget {
       future: future,
       initialData: AsyncValue<T>.loading(),
       builder: (context, snapshot) => snapshot.requireData.when(
-        loading: () =>
-            Center(child: loading?.call() ?? const CircularProgressIndicator()),
+        loading: () => Center(
+          child: loading?.call() ?? const CircularProgressIndicator(),
+        ),
         success: (value) => success?.call(value) ?? const SizedBox(),
         failure: (error) => failure?.call(error) ?? const ErrorPage(),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/flist_page.dart';
+import 'journal_detail.dart';
 import 'jurnal.dart';
 import 'jurnal_add.dart';
 
@@ -33,7 +34,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
 
   Future<List<Jurnal>> fetchPage(int page) async {
     try {
-      List result = await ApiService().getList('/all/33', page, _pageSize);
+      List result = await ApiService().getList('/all/43', page, _pageSize);
       return result.map((i) => Jurnal.fromMap(i)).toList();
     } catch (error, s) {
       debugPrint(s.toString());
@@ -43,7 +44,6 @@ class _JurnalListPageState extends State<JurnalListPage> {
 
   Future<void> delete(String id) async {
     await ApiService().delete('Jurnal', id, context: context);
-    _pagingController.refresh();
   }
 
   Widget widgetItemList(Jurnal i) {
@@ -52,7 +52,9 @@ class _JurnalListPageState extends State<JurnalListPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => JurnalAddPage(item: i),
+            builder: (context) => JurnalDetailPage(
+              item: i,
+            ),
           ),
         ).then((v) {
           if (v != null) _pagingController.refresh();
@@ -69,8 +71,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(i.productIdName),
-              Text(i.count),
+              Text(i.id),
             ],
           ),
         ),

@@ -39,7 +39,7 @@ class _GeoWidgetState extends State<GeoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AsyncValueBuilder(
+    return ZPageFuture(
       // key: _refreshKey,
       future: location(),
       success: (v) {
