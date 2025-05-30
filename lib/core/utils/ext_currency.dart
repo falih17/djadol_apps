@@ -2,6 +2,7 @@ extension StringFormatter on String {
   String toCurrency() {
     int step = 1;
     String val = this;
+    if (int.tryParse(this) == null) return this;
 
     for (var i = val.length - 1; i >= 0; i--) {
       if (i - 2 * step > 0) {

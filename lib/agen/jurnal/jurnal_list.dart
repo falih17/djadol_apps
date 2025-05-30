@@ -1,6 +1,7 @@
-import 'package:djadol_mobile/core/widgets/zui.dart';
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/flist_page.dart';
 import 'journal_detail.dart';
@@ -36,8 +37,8 @@ class _JurnalListPageState extends State<JurnalListPage> {
     try {
       List result = await ApiService().getList('/all/43', page, _pageSize);
       return result.map((i) => Jurnal.fromMap(i)).toList();
-    } catch (error, s) {
-      debugPrint(s.toString());
+    } catch (error) {
+      debugPrint('Error fetching data: $error');
       throw Exception('Failed to fetch data');
     }
   }
@@ -60,18 +61,21 @@ class _JurnalListPageState extends State<JurnalListPage> {
           if (v != null) _pagingController.refresh();
         });
       },
-      onLongPress: () async {
-        if (await confirmDanger(context, title: 'Delete')) {
-          delete(i.id);
-        }
-      },
+      // onLongPress: () async {
+      //   if (await confirmDanger(context, title: 'Delete')) {
+      //     delete(i.id);
+      //   }
+      // },
       child: Card(
         child: ListTile(
           title: Text(i.retailIdName),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(i.id),
+              Text(i.totalPrice.toCurrency()),
+              i.isNew == '1'
+                  ? const Icon(Icons.new_releases, color: Colors.green)
+                  : const SizedBox.shrink(),
             ],
           ),
         ),

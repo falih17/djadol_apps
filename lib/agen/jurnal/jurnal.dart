@@ -5,6 +5,8 @@ class Jurnal {
   String retailIdName;
   String photo;
   String latlong;
+  String isNew;
+  String totalPrice;
   List<JurnalDetail> detail;
 
   Jurnal({
@@ -14,6 +16,8 @@ class Jurnal {
     required this.retailIdName,
     required this.photo,
     required this.latlong,
+    required this.isNew,
+    required this.totalPrice,
     this.detail = const [],
   });
 
@@ -29,12 +33,14 @@ class Jurnal {
       retailIdName: map['retail_id_name'] ?? '',
       photo: map['photo'] ?? '',
       latlong: map['latlong'] ?? '',
+      isNew: map['is_new'] ?? '',
+      totalPrice: map['total_price'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'Jurnal(id: $id, createdAt: $createdAt, retailId: $retailId, retailIdName: $retailIdName, photo: $photo, latlong: $latlong)';
+    return 'Jurnal(id: $id, createdAt: $createdAt, retailId: $retailId, retailIdName: $retailIdName, photo: $photo, latlong: $latlong, isNew: $isNew, totalPrice: $totalPrice, detail: $detail)';
   }
 }
 

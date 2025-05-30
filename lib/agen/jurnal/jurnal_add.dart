@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
+import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
-
-import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/geo_location/geo_widget.dart';
@@ -12,7 +11,6 @@ import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'cart_page.dart';
 import 'product_model.dart';
-import 'jurnal.dart';
 
 class JurnalAddPage extends StatefulWidget {
   const JurnalAddPage({super.key});
@@ -66,6 +64,8 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         'retail_id': retailId,
         'status': 'out',
         'latlong': '$latitude,$longitude',
+        'is_new': newRetail ? '1' : '0',
+        'total_price': totalPrice,
         'detail': jsonEncode(cartItems),
       };
       if (picture != null) {
@@ -73,7 +73,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
       }
 
       await ApiService().post('/bulk/form_action/20', data, context: context);
-      print(data);
+      Navigator.pop(context, true);
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
     }
