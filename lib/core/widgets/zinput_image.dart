@@ -31,10 +31,10 @@ class _ZInputImageState extends State<ZInputImage> {
     try {
       if (i == 1) {
         image = await _picker.pickImage(
-            source: ImageSource.gallery, maxHeight: 1024, maxWidth: 1024);
+            source: ImageSource.gallery, maxHeight: 800, maxWidth: 800);
       } else {
         image = await _picker.pickImage(
-            source: ImageSource.camera, maxHeight: 1024, maxWidth: 1024);
+            source: ImageSource.camera, maxHeight: 800, maxWidth: 800);
       }
       setState(() {
         _image = image;

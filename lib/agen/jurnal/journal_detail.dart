@@ -1,5 +1,6 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/core/pages/async_value.dart';
+import 'package:djadol_mobile/core/pages/empty_page.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class JurnalDetailPage extends StatelessWidget {
   Future<AsyncValue<Jurnal>> fetchData() async {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
-      final data = {
+      Map<String, dynamic> data = {
         'jurnal_id': item.id,
       };
       List result = await ApiService().getList('/all/33', 0, 1000, data: data);
@@ -29,7 +30,15 @@ class JurnalDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Journal Detail'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(item.retailIdName),
+            item.isNew == '1'
+                ? const Icon(Icons.new_releases, color: Colors.green)
+                : const SizedBox.shrink()
+          ],
+        ),
       ),
       body: ZPageFuture<Jurnal>(
         future: fetchData(),
@@ -38,11 +47,6 @@ class JurnalDetailPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(value.retailIdName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    )),
                 Image.network(
                   value.photo,
                   height: 200,
@@ -56,20 +60,22 @@ class JurnalDetailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: value.detail.length,
-                    itemBuilder: (context, index) {
-                      final detail = value.detail[index];
-                      return Card(
-                        color: Colors.white,
-                        child: ListTile(
-                          title: Text(detail.productIdName),
-                          subtitle: Text(
-                              '${detail.count} x ${detail.price.toString().toCurrency()}'),
+                  child: (value.detail.isEmpty)
+                      ? EmptyPage()
+                      : ListView.builder(
+                          itemCount: value.detail.length,
+                          itemBuilder: (context, index) {
+                            final detail = value.detail[index];
+                            return Card(
+                              color: Colors.white,
+                              child: ListTile(
+                                title: Text(detail.productIdName),
+                                subtitle: Text(
+                                    '${detail.count} x ${detail.price.toString().toCurrency()}'),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20),
