@@ -30,15 +30,16 @@ class JurnalDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(item.retailIdName),
-            item.isNew == '1'
-                ? const Icon(Icons.new_releases, color: Colors.green)
-                : const SizedBox.shrink()
-          ],
-        ),
+        title: Text('Sales'),
+        // title: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Text(item.retailIdName),
+        //     item.isNew == '1'
+        //         ? const Icon(Icons.new_releases, color: Colors.green)
+        //         : const SizedBox.shrink()
+        //   ],
+        // ),
       ),
       body: ZPageFuture<Jurnal>(
         future: fetchData(),
@@ -47,18 +48,24 @@ class JurnalDetailPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.network(
-                  value.photo,
-                  height: 200,
-                  width: 200,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    Icons.image,
-                    color: Colors.grey,
-                    size: 100,
-                  ),
+                // Image.network(
+                //   value.photo,
+                //   height: 200,
+                //   width: 200,
+                //   fit: BoxFit.cover,
+                //   errorBuilder: (context, error, stackTrace) => Icon(
+                //     Icons.image,
+                //     color: Colors.grey,
+                //     size: 100,
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
+                Text(item.retailIdName,
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                SizedBox(
+                  height: 10,
                 ),
-                const SizedBox(height: 20),
                 Expanded(
                   child: (value.detail.isEmpty)
                       ? EmptyPage()

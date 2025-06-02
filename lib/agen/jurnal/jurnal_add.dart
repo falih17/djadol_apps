@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
-import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../core/geo_location/geo_widget.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
 import 'cart_page.dart';
@@ -83,7 +81,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Jurnal'),
+        title: const Text('Sales'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -96,49 +94,51 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ZInputImage(
-                        onChanged: (value) => picture = value,
-                        url: '',
-                        cameraOnly: false,
-                      ),
-                      ZInputSwitch(
-                          label: "Toko Baru",
-                          value: newRetail,
-                          onChanged: (v) {
-                            setState(() {
-                              newRetail = v;
-                            });
-                          }),
+                      // ZInputImage(
+                      //   onChanged: (value) => picture = value,
+                      //   url: '',
+                      //   cameraOnly: true,
+                      // ),
+                      // ZInputSwitch(
+                      //     label: "Toko Baru",
+                      //     value: newRetail,
+                      //     onChanged: (v) {
+                      //       setState(() {
+                      //         newRetail = v;
+                      //       });
+                      //     }),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Expanded(
                             child: ZInputSelect(
+                              label: 'Toko',
                               url: '/all/31',
                               onChanged: (v) {
                                 retailId = v;
                               },
                             ),
                           ),
-                          SizedBox(width: 10),
-                          ZIconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const RetailAddPage(),
-                                ),
-                              );
-                            },
-                          ),
+                          // SizedBox(width: 10),
+                          // ZIconButton(
+                          //   onPressed: () {
+                          //     Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => const RetailAddPage(),
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                         ],
                       ),
-                      GeoWidget(
-                        onChanged: (value) {
-                          latitude = value.latitude;
-                          longitude = value.longitude;
-                        },
-                      ),
+                      // const SizedBox(height: 20),
+                      // GeoWidget(
+                      //   onChanged: (value) {
+                      //     latitude = value.latitude;
+                      //     longitude = value.longitude;
+                      //   },
+                      // ),
 
                       const SizedBox(height: 20),
                       ZButton(
