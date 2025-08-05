@@ -73,6 +73,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(i.totalPrice.toCurrency()),
+              Text(i.createdAt.toString()),
               // i.isNew == '1'
               //     ? const Icon(Icons.new_releases, color: Colors.green)
               //     : const SizedBox.shrink(),
