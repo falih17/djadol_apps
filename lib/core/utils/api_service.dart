@@ -1,8 +1,8 @@
-import '../widgets/zui.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/zui.dart';
 import 'store.dart';
 
 class ApiService {
@@ -56,7 +56,7 @@ class ApiService {
                 await refreshToken();
                 return handler.resolve(await _dio.fetch(e.requestOptions));
               }
-              debugPrint('Error: ${e.message}');
+              debugPrint('Error: $e');
               debugPrint('Response: ${e.response}');
               handler.next(e);
             },

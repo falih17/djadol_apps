@@ -53,8 +53,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
     });
   }
 
-  int get totalPrice => cartItems.fold(
-      0, (sum, item) => sum + (item.quantity * item.product.priceSale));
+  int get totalPrice => cartItems.fold(0, (sum, item) => sum + (item.subtotal));
 
   Future<void> submit() async {
     try {
@@ -165,7 +164,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                           return ProductItem(
                             name: item.product.name,
                             quantity: item.quantity,
-                            price: item.product.priceSale,
+                            price: item.finalPrice,
                             subtotal: item.subtotal,
                             onAdd: () => updateQuantity(index, 1),
                             onMinus: () => updateQuantity(index, -1),

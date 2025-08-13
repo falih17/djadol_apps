@@ -12,7 +12,23 @@ class CartItem {
     required this.product,
   });
 
-  int get subtotal => quantity * product.priceSale;
+  int get finalPrice {
+    if (product.priceMinSale3 < quantity && product.priceSale3 > 0) {
+      return product.priceSale3;
+    } else if (product.priceMinSale2 < quantity && product.priceSale2 > 0) {
+      return product.priceSale2;
+    }
+    return product.priceSale;
+  }
+
+  int get subtotal {
+    if (product.priceMinSale3 < quantity && product.priceSale3 > 0) {
+      return quantity * product.priceSale3;
+    } else if (product.priceMinSale2 < quantity && product.priceSale2 > 0) {
+      return quantity * product.priceSale2;
+    }
+    return quantity * product.priceSale;
+  }
 
   Map<String, dynamic> toJson() {
     return {
