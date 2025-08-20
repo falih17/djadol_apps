@@ -45,15 +45,21 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
     await ApiService().delete('Jurnal', id, context: context);
   }
 
-  Widget widgetItemList(Jurnal i) {
+  Widget widgetItemList(Jurnal i, int index) {
     return InkWell(
       child: Card(
         child: ListTile(
-          title: Text(i.retailIdName),
+          title: Text('${++index}. ${i.retailIdName}'),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(i.createdAt),
+                Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
+                  Text('Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
+                ],
+                ),
               i.isNew == '1'
                   ? const Icon(Icons.new_releases, color: Colors.green)
                   : const SizedBox.shrink(),
@@ -72,7 +78,7 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
         body: FListPage(
           pagingController: _pagingController,
           itemBuilder: (context, item, index) => widgetItemList(
-            item,
+            item, index
           ),
         ),
         floatingActionButton: FloatingActionButton(
