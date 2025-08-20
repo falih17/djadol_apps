@@ -14,7 +14,7 @@ class RetailListPage extends StatefulWidget {
 }
 
 class _RetailListPageState extends State<RetailListPage> {
-  static const _pageSize = 20;
+  static const _pageSize = 40;
   late final _pagingController = PagingController<int, Retail>(
     getNextPageKey: (state) {
       final keys = state.keys;
@@ -50,9 +50,9 @@ class _RetailListPageState extends State<RetailListPage> {
     _pagingController.refresh();
   }
 
-  Widget widgetItemList(Retail i) {
+  Widget widgetItemList(Retail i, int index) {
     return ProductCard(
-      name: i.name,
+      name: '${++index}. ${i.name}',
       description: i.address,
       imageUrl: i.picture,
       onTap: () {
@@ -111,7 +111,7 @@ class _RetailListPageState extends State<RetailListPage> {
               child: FListPage(
                 pagingController: _pagingController,
                 itemBuilder: (context, item, index) => widgetItemList(
-                  item,
+                  item,index
                 ),
               ),
             ),
