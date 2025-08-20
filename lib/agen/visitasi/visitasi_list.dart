@@ -20,7 +20,7 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
   DateTime _selectedDate = DateTime.now();
   int countTotal = 0;
 
-  static const _pageSize = 20;
+  static const _pageSize = 100;
   late final _pagingController = PagingController<int, dynamic>(
     getNextPageKey: (state) {
       final keys = state.keys;
