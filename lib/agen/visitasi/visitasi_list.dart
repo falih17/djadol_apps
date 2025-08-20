@@ -137,7 +137,8 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
                   "${(_pagingController.items?.length ?? 0) / countTotal * 100} %",
                   style: TextStyle(fontSize: 12.0, color: Colors.white),
                 ),
-                trailing: Text('${_pagingController.items?.length ?? 0} /countTotal'),
+                trailing: Text(
+                    '${_pagingController.items?.length ?? 0} /$countTotal'),
                 // linearStrokeCap: LinearStrokeCap.roundAll,
                 backgroundColor: Colors.grey,
                 progressColor: Theme.of(context).colorScheme.primary,
