@@ -46,27 +46,56 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
   }
 
   Widget widgetItemList(Jurnal i, int index) {
-    return InkWell(
-      child: Card(
+    return Column(
+      children: [
+      if (index == 0)
+        Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Row(
+          children: [
+          const Text('Filter tanggal:'),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () async {
+            DateTime? picked = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(2020),
+              lastDate: DateTime(2100),
+            );
+            if (picked != null) {
+              // Implement your filter logic here
+              // For example, you can setState and filter the pagingController
+            }
+            },
+            child: const Text('Pilih Tanggal'),
+          ),
+          ],
+        ),
+        ),
+      InkWell(
+        child: Card(
         child: ListTile(
           title: Text('${++index}. ${i.retailIdName}'),
           subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
-                  Text('Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
-                ],
-                ),
-              i.isNew == '1'
-                  ? const Icon(Icons.new_releases, color: Colors.green)
-                  : const SizedBox.shrink(),
+              Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
+              Text('Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
             ],
+            ),
+            i.isNew == '1'
+              ? const Icon(Icons.new_releases, color: Colors.green)
+              : const SizedBox.shrink(),
+          ],
           ),
         ),
+        ),
       ),
+      ],
     );
   }
 
