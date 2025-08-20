@@ -1,3 +1,5 @@
+import 'package:djadol_mobile/core/utils/ext_date.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -14,6 +16,8 @@ class VisitasiListPage extends StatefulWidget {
 }
 
 class _VisitasiListPageState extends State<VisitasiListPage> {
+  DateTime _selectedDate = DateTime.now();
+
   static const _pageSize = 20;
   late final _pagingController = PagingController<int, dynamic>(
     getNextPageKey: (state) {
@@ -33,7 +37,13 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
 
   Future<List<Jurnal>> fetchPage(int page) async {
     try {
-      List result = await ApiService().getList('/all/43', page, _pageSize);
+      var filter = {
+        'created_at_min': _selectedDate.toStringDate(),
+        'created_at_max': _selectedDate.toStringDate()
+      };
+
+      List result =
+          await ApiService().getList('/all/43', page, _pageSize, data: filter);
       return result.map((i) => Jurnal.fromMap(i)).toList();
     } catch (error) {
       debugPrint('Error fetching data: $error');
@@ -48,53 +58,29 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
   Widget widgetItemList(Jurnal i, int index) {
     return Column(
       children: [
-      if (index == 0)
-        Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Row(
-          children: [
-          const Text('Filter tanggal:'),
-          const SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: () async {
-            DateTime? picked = await showDatePicker(
-              context: context,
-              initialDate: DateTime.now(),
-              firstDate: DateTime(2020),
-              lastDate: DateTime(2100),
-            );
-            if (picked != null) {
-              // Implement your filter logic here
-              // For example, you can setState and filter the pagingController
-            }
-            },
-            child: const Text('Pilih Tanggal'),
-          ),
-          ],
-        ),
-        ),
-      InkWell(
-        child: Card(
-        child: ListTile(
-          title: Text('${++index}. ${i.retailIdName}'),
-          subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
-              Text('Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
-            ],
+        InkWell(
+          child: Card(
+            child: ListTile(
+              title: Text('${++index}. ${i.retailIdName}'),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
+                      Text(
+                          'Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
+                    ],
+                  ),
+                  i.isNew == '1'
+                      ? const Icon(Icons.new_releases, color: Colors.green)
+                      : const SizedBox.shrink(),
+                ],
+              ),
             ),
-            i.isNew == '1'
-              ? const Icon(Icons.new_releases, color: Colors.green)
-              : const SizedBox.shrink(),
-          ],
           ),
         ),
-        ),
-      ),
       ],
     );
   }
@@ -104,11 +90,31 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
         appBar: AppBar(
           title: const Text('Kunjungan'),
         ),
-        body: FListPage(
-          pagingController: _pagingController,
-          itemBuilder: (context, item, index) => widgetItemList(
-            item, index
-          ),
+        body: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: EasyDateTimeLinePicker(
+                focusedDate: _selectedDate,
+                firstDate: DateTime(2024, 3, 18),
+                lastDate: DateTime(2030, 3, 18),
+                onDateChange: (date) {
+                  setState(() {
+                    _selectedDate = date;
+                  });
+                  _pagingController.refresh();
+                },
+              ),
+            ),
+            Flexible(
+              child: FListPage(
+                pagingController: _pagingController,
+                itemBuilder: (context, item, index) =>
+                    widgetItemList(item, index),
+              ),
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
