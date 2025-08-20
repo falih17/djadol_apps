@@ -30,6 +30,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
   Future<void> submit() async {
     try {
       Map<String, dynamic> data = {
+        'form_id': '43',
         'retail_id': retailId,
         'status': 'out',
         'latlong': '$latitude,$longitude',
@@ -39,7 +40,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
         data.addAll({'photo': multiPartFile(picture!.path)});
       }
 
-      await ApiService().post('/bulk/form_action/20', data, context: context);
+      await ApiService().post('/form_action', data, context: context);
       Navigator.pop(context, true);
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
