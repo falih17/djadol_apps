@@ -18,7 +18,7 @@ class VisitasiListPage extends StatefulWidget {
 
 class _VisitasiListPageState extends State<VisitasiListPage> {
   DateTime _selectedDate = DateTime.now();
-  int countTotal = 0;
+  int countTotal = 40;
 
   static const _pageSize = 100;
   late final _pagingController = PagingController<int, dynamic>(
@@ -132,12 +132,12 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
               padding: EdgeInsets.all(15.0),
               child: LinearPercentIndicator(
                 lineHeight: 14.0,
-                percent: 0.5,
+                percent: (_pagingController.items?.length ?? 0) / countTotal,
                 center: Text(
-                  "${(_pagingController.items?.length ?? 0) / 40 * 100} %",
+                  "${(_pagingController.items?.length ?? 0) / countTotal * 100} %",
                   style: TextStyle(fontSize: 12.0, color: Colors.white),
                 ),
-                trailing: Text('${_pagingController.items?.length ?? 0} /40'),
+                trailing: Text('${_pagingController.items?.length ?? 0} /countTotal'),
                 // linearStrokeCap: LinearStrokeCap.roundAll,
                 backgroundColor: Colors.grey,
                 progressColor: Theme.of(context).colorScheme.primary,
