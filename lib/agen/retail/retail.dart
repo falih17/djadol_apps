@@ -6,12 +6,14 @@ class Retail {
   String name;
   String address;
   String picture;
+  String phone;
 
   Retail({
     required this.id,
     required this.name,
     required this.address,
     required this.picture,
+    required this.phone,
   });
 
   factory Retail.fromMap(Map<String, dynamic> map) {
@@ -20,6 +22,7 @@ class Retail {
       name: (map['name'] ?? '') as String,
       address: (map['address'] ?? '') as String,
       picture: (map['picture'] ?? '') as String,
+      phone: (map['phone'] ?? '') as String,
     );
   }
 
@@ -28,12 +31,14 @@ class Retail {
     String? name,
     String? address,
     String? picture,
+    String? phone,
   }) {
     return Retail(
       id: id ?? this.id,
       name: name ?? this.name,
       address: address ?? this.address,
       picture: picture ?? this.picture,
+      phone: phone ?? this.phone,
     );
   }
 
@@ -43,6 +48,7 @@ class Retail {
       'name': name,
       'address': address,
       'picture': picture,
+      'phone': phone,
     };
   }
 
@@ -60,11 +66,12 @@ class Retail {
     return other.id == id &&
         other.name == name &&
         other.address == address &&
-        other.picture == picture;
+        other.picture == picture &&
+        other.phone == phone;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ address.hashCode ^ picture.hashCode;
+    return id.hashCode ^ name.hashCode ^ address.hashCode ^ picture.hashCode ^ phone.hashCode;
   }
 }

@@ -18,6 +18,7 @@ class _RetailAddPageState extends State<RetailAddPage> {
 
   TextEditingController name = TextEditingController();
   TextEditingController address = TextEditingController();
+  TextEditingController phone = TextEditingController();
   double? latitude;
   double? longitude;
   XFile? picture;
@@ -32,6 +33,7 @@ class _RetailAddPageState extends State<RetailAddPage> {
     if (widget.item != null) {
       name.text = widget.item!.name;
       address.text = widget.item!.address;
+      phone.text = widget.item!.phone;
     }
   }
 
@@ -41,6 +43,7 @@ class _RetailAddPageState extends State<RetailAddPage> {
         'form_id': '31',
         'name': name.text,
         'address': address.text,
+        'phone': phone.text,
       };
       if (picture != null) {
         data.addAll({'picture': multiPartFile(picture!.path)});
@@ -84,6 +87,11 @@ class _RetailAddPageState extends State<RetailAddPage> {
                 ZInput(
                   label: 'Name',
                   controller: name,
+                  required: true,
+                ),
+                ZInput(
+                  label: 'Phone',
+                  controller: phone,
                   required: false,
                 ),
                 ZInput(
