@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:flutter/material.dart';
 
 import '../core/utils/api_service.dart';
@@ -81,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final r = await ApiService().post('/auth/login', body, context: context);
-      ApiService().setToken(r.data['token']);
+      Store().setToken(r.data['token'], r.data['user_id']);
 
       Navigator.pushReplacement(
         context,

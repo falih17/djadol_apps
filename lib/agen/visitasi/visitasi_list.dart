@@ -1,4 +1,6 @@
 import 'package:djadol_mobile/core/utils/ext_date.dart';
+import 'package:djadol_mobile/core/utils/store.dart';
+import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -41,7 +43,8 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
     try {
       var filter = {
         'created_at_min': _selectedDate.toStringDate(),
-        'created_at_max': _selectedDate.toStringDate()
+        'created_at_max': _selectedDate.toStringDate(),
+        'created_by': Store().userId
       };
 
       List result =
@@ -62,6 +65,15 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
     return Column(
       children: [
         InkWell(
+          onLongPress: () async {
+            bool isConfirm = await confirm(
+              context,
+              title: Text('Hapus data kunjungan'),
+            );
+            if (isConfirm) {
+              delete(i.id);
+            }
+          },
           child: Card(
             child: ListTile(
               title: Text('${++index}. ${i.retailIdName}',

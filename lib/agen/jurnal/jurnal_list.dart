@@ -1,8 +1,11 @@
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
+import 'package:djadol_mobile/core/utils/ext_date.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../core/utils/api_service.dart';
+import '../../core/utils/store.dart';
 import '../../core/widgets/flist_page.dart';
 import 'journal_detail.dart';
 import 'jurnal.dart';
@@ -16,6 +19,8 @@ class JurnalListPage extends StatefulWidget {
 }
 
 class _JurnalListPageState extends State<JurnalListPage> {
+  DateTime _selectedDate = DateTime.now();
+
   static const _pageSize = 20;
   late final _pagingController = PagingController<int, dynamic>(
     getNextPageKey: (state) {
@@ -31,11 +36,18 @@ class _JurnalListPageState extends State<JurnalListPage> {
   @override
   void initState() {
     super.initState();
+    getTotal();
   }
 
   Future<List<Jurnal>> fetchPage(int page) async {
     try {
-      List result = await ApiService().getList('/all/43', page, _pageSize);
+      var filter = {
+        'created_at_min': _selectedDate.toStringDate(),
+        'created_at_max': _selectedDate.toStringDate(),
+        'created_by': Store().userId,
+      };
+      List result =
+          await ApiService().getList('/all/44', page, _pageSize, data: filter);
       return result.map((i) => Jurnal.fromMap(i)).toList();
     } catch (error) {
       debugPrint('Error fetching data: $error');
@@ -43,11 +55,22 @@ class _JurnalListPageState extends State<JurnalListPage> {
     }
   }
 
+  Future<void> getTotal() async {
+    return;
+    // api/api_cust
+    Map<String, dynamic> data = {
+      'created_at_min': _selectedDate.toStringDate(),
+      'created_at_max': _selectedDate.toStringDate()
+    };
+    var result = await ApiService().post('/api_cust', data);
+    print(result);
+  }
+
   Future<void> delete(String id) async {
     await ApiService().delete('Jurnal', id, context: context);
   }
 
-  Widget widgetItemList(Jurnal i) {
+  Widget widgetItemList(Jurnal i, int index) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -68,7 +91,8 @@ class _JurnalListPageState extends State<JurnalListPage> {
       // },
       child: Card(
         child: ListTile(
-          title: Text(i.retailIdName),
+          title: Text('${++index}. ${i.retailIdName}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -89,11 +113,48 @@ class _JurnalListPageState extends State<JurnalListPage> {
         appBar: AppBar(
           title: const Text('Sales'),
         ),
-        body: FListPage(
-          pagingController: _pagingController,
-          itemBuilder: (context, item, index) => widgetItemList(
-            item,
-          ),
+        body: Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: EasyDateTimeLinePicker(
+                focusedDate: _selectedDate,
+                firstDate: DateTime(2024, 3, 18),
+                lastDate: DateTime(2030, 3, 18),
+                onDateChange: (date) {
+                  setState(() {
+                    _selectedDate = date;
+                  });
+                  getTotal();
+                  _pagingController.refresh();
+                },
+              ),
+            ),
+            Flexible(
+              child: FListPage(
+                pagingController: _pagingController,
+                itemBuilder: (context, item, index) =>
+                    widgetItemList(item, index),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total Sales : ',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    '200.000',
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
