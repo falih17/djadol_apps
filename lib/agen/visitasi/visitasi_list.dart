@@ -58,7 +58,9 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
   }
 
   Future<void> delete(String id) async {
-    await ApiService().delete('Jurnal', id, context: context);
+    var data = {'id': id, 'form_id': 43};
+    await ApiService().post('/act/remove', data, context: context);
+    _pagingController.refresh();
   }
 
   Widget widgetItemList(Jurnal i, int index) {

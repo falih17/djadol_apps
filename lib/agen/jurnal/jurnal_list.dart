@@ -20,6 +20,7 @@ class JurnalListPage extends StatefulWidget {
 
 class _JurnalListPageState extends State<JurnalListPage> {
   DateTime _selectedDate = DateTime.now();
+  String totalSales = '0';
 
   static const _pageSize = 20;
   late final _pagingController = PagingController<int, dynamic>(
@@ -56,14 +57,14 @@ class _JurnalListPageState extends State<JurnalListPage> {
   }
 
   Future<void> getTotal() async {
-    return;
     // api/api_cust
     Map<String, dynamic> data = {
-      'created_at_min': _selectedDate.toStringDate(),
-      'created_at_max': _selectedDate.toStringDate()
+      'created_at': _selectedDate.toStringDate(),
     };
-    var result = await ApiService().post('/api_cust', data);
-    print(result);
+    var result = await ApiService().post('/act/totalsales', data);
+    setState(() {
+      totalSales = result.data['total'] ?? '0';
+    });
   }
 
   Future<void> delete(String id) async {
@@ -148,7 +149,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    '200.000',
+                    totalSales.toCurrency(),
                     style: TextStyle(fontSize: 20),
                   )
                 ],
