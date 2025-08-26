@@ -56,12 +56,31 @@ class _AbsentListPageState extends State<AbsentListPage> {
           delete(i.id);
         }
       },
-      child: ZCard(
-        title: i.createdAt,
-        icon: Icons.gps_fixed,
-      ),
+      child: Card(
+        child:Container(
+          color:widget.type ? Colors.blue[100] : Colors.amber[100],
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text("Tanggal : ", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(i.createdAt.split(' ').first),
+                ],
+              ), // Tanggal
+              Row(
+                children: [
+                  Text("Waktu : ", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ').last : ''),
+                ],
+              ), // Waktu
+              
+            ],
+          ),
+        ),
+      )
     );
-  }
+    }
 
   @override
   Widget build(BuildContext context) => Scaffold(

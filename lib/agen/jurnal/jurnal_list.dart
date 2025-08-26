@@ -113,6 +113,29 @@ class _JurnalListPageState extends State<JurnalListPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Sales'),
+          actions: [
+            IconButton(
+              style: IconButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0), // Adjust radius as needed
+                ),
+                backgroundColor: Colors.purple[200], // Optional: set background color
+              ),
+              color: Colors.white, // Icon color
+              icon: Icon(
+                 Icons.add),
+              onPressed: () {
+                Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const JurnalAddPage(),
+              ),
+            ).then((v) {
+              if (v != null) _pagingController.refresh();
+            });
+              },
+            ),
+          ],
         ),
         body: Column(
           children: [
@@ -139,36 +162,41 @@ class _JurnalListPageState extends State<JurnalListPage> {
                     widgetItemList(item, index),
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.all(20),
+              color: Colors.purple[200],
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Total Sales : ',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold, ),
                   ),
                   Text(
                     totalSales.toCurrency(),
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const JurnalAddPage(),
-              ),
-            ).then((v) {
-              if (v != null) _pagingController.refresh();
-            });
-          },
-          child: const Icon(Icons.add),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => const JurnalAddPage(),
+        //       ),
+        //     ).then((v) {
+        //       if (v != null) _pagingController.refresh();
+        //     });
+        //   },
+        //   child: const Icon(Icons.add),
+        // ),
       );
 }

@@ -76,9 +76,23 @@ class JurnalDetailPage extends StatelessWidget {
                             return Card(
                               color: Colors.white,
                               child: ListTile(
-                                title: Text(detail.productIdName),
-                                subtitle: Text(
-                                    '${detail.count} x ${detail.price.toString().toCurrency()}'),
+                                title: Text(detail.productName,
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                ),
+                                subtitle: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        '${detail.count} x ${detail.price.toString().toCurrency()}'),
+                                        Text('${(detail.subtotal * -1).toString().toCurrency()}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.purple)),
+                                  ],
+                                ),
                               ),
                             );
                           },
