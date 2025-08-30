@@ -17,6 +17,10 @@ class GeoLocation {
     return position;
   }
 
+  Future<bool> check() async {
+    return await Geolocator.isLocationServiceEnabled();
+  }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;

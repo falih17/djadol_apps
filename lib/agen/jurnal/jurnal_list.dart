@@ -1,5 +1,6 @@
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:djadol_mobile/core/utils/ext_date.dart';
+import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -7,6 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../core/utils/api_service.dart';
 import '../../core/utils/store.dart';
 import '../../core/widgets/flist_page.dart';
+import '../../widgets/floating_center.dart';
 import 'journal_detail.dart';
 import 'jurnal.dart';
 import 'jurnal_add.dart';
@@ -91,17 +93,41 @@ class _JurnalListPageState extends State<JurnalListPage> {
       //   }
       // },
       child: Card(
-        child: ListTile(
-          title: Text('${++index}. ${i.retailIdName}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          subtitle: Row(
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(i.totalPrice.toCurrency()),
-              Text(i.createdAt.toString()),
-              // i.isNew == '1'
-              //     ? const Icon(Icons.new_releases, color: Colors.green)
-              //     : const SizedBox.shrink(),
+              Flexible(
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.grey[300],
+                      child: Icon(Icons.store, color: Constants.mColorBlue),
+                    ),
+                    Flexible(
+                      child: Text(
+                        ' ${i.retailIdName}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Rp. ${i.totalPrice.toCurrency()}',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Constants.mColorBlue,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(i.createdAt.toDateMMMwHourMinutes()),
+                ],
+              ),
             ],
           ),
         ),
@@ -113,29 +139,6 @@ class _JurnalListPageState extends State<JurnalListPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Sales'),
-          actions: [
-            IconButton(
-              style: IconButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0), // Adjust radius as needed
-                ),
-                backgroundColor: Colors.purple[200], // Optional: set background color
-              ),
-              color: Colors.white, // Icon color
-              icon: Icon(
-                 Icons.add),
-              onPressed: () {
-                Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const JurnalAddPage(),
-              ),
-            ).then((v) {
-              if (v != null) _pagingController.refresh();
-            });
-              },
-            ),
-          ],
         ),
         body: Column(
           children: [
@@ -170,33 +173,35 @@ class _JurnalListPageState extends State<JurnalListPage> {
                 children: [
                   Text(
                     'Total Sales : ',
-                    style: TextStyle(fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold, ),
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Text(
                     totalSales.toCurrency(),
-                    style: TextStyle(fontSize: 20,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => const JurnalAddPage(),
-        //       ),
-        //     ).then((v) {
-        //       if (v != null) _pagingController.refresh();
-        //     });
-        //   },
-        //   child: const Icon(Icons.add),
-        // ),
+        floatingActionButton: FloatingButtonCenter(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const JurnalAddPage(),
+              ),
+            ).then((v) {
+              if (v != null) _pagingController.refresh();
+            });
+          },
+        ),
       );
 }

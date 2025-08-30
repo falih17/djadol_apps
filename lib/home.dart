@@ -7,9 +7,28 @@ import 'package:flutter/material.dart';
 
 import 'agen/jurnal/jurnal_list.dart';
 import 'agen/retail/retail_list.dart';
+import 'core/geo_location/geo_location.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    cekGps();
+  }
+
+  Future<void> cekGps() async {
+    bool isActiveGps = await GeoLocation().check();
+    if (!isActiveGps) {
+      ZToast.error(context, 'Please enable GPS to continue');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

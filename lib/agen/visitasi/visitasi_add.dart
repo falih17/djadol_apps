@@ -83,16 +83,17 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                             ),
                           ),
                           SizedBox(width: 20),
-                          ZIconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const RetailAddPage(),
-                                ),
-                              );
-                            },
-                          ),
+                          if (newRetail)
+                            ZIconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RetailAddPage(),
+                                  ),
+                                );
+                              },
+                            ),
                         ],
                       ),
                       ZInputSwitch(

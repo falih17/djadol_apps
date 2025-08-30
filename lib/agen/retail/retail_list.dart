@@ -1,8 +1,10 @@
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/flist_page.dart';
+import '../../widgets/floating_center.dart';
 import 'retail.dart';
 import 'retail_add.dart';
 
@@ -110,14 +112,13 @@ class _RetailListPageState extends State<RetailListPage> {
             Expanded(
               child: FListPage(
                 pagingController: _pagingController,
-                itemBuilder: (context, item, index) => widgetItemList(
-                  item,index
-                ),
+                itemBuilder: (context, item, index) =>
+                    widgetItemList(item, index),
               ),
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingButtonCenter(
           onPressed: () {
             Navigator.push(
               context,
@@ -128,7 +129,6 @@ class _RetailListPageState extends State<RetailListPage> {
               if (v != null) _pagingController.refresh();
             });
           },
-          child: const Icon(Icons.add),
         ),
       );
 }

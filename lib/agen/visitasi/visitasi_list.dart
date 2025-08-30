@@ -8,6 +8,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/flist_page.dart';
+import '../../widgets/floating_center.dart';
 import 'visitasi.dart';
 import 'visitasi_add.dart';
 
@@ -117,29 +118,6 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Kunjungan'),
-          actions: [
-            IconButton(
-              style: IconButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0), // Adjust radius as needed
-                ),
-                backgroundColor: Colors.purple[200], // Optional: set background color
-              ),
-              color: Colors.white, // Icon color
-              icon: Icon(
-                 Icons.add),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VisitasiAddPage(),
-                  ),
-                ).then((v) {
-                  if (v != null) _pagingController.refresh();
-                });
-              },
-            ),
-          ],
         ),
         body: Column(
           children: [
@@ -183,18 +161,17 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
             ),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => const VisitasiAddPage(),
-        //       ),
-        //     ).then((v) {
-        //       if (v != null) _pagingController.refresh();
-        //     });
-        //   },
-        //   child: const Icon(Icons.add),
-        // ),
+        floatingActionButton: FloatingButtonCenter(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const VisitasiAddPage(),
+              ),
+            ).then((v) {
+              if (v != null) _pagingController.refresh();
+            });
+          },
+        ),
       );
 }
