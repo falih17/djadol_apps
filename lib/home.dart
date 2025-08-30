@@ -67,8 +67,9 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+                  onPressed: () async {
+                    bool isActiveGps = await GeoLocation().check();
+                    if (isActiveGps) Navigator.of(context).pop();
                     // GeoLocation().openSettings();
                   },
                 ),

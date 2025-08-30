@@ -141,6 +141,14 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                   text: 'Submit',
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) return;
+                    if (retailId.isEmpty) {
+                      ZToast.error(context, 'Toko harus diisi');
+                      return;
+                    }
+                    if (picture == null) {
+                      ZToast.error(context, 'Foto harus diisi');
+                      return;
+                    }
                     submit();
                   },
                 ),

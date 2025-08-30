@@ -127,7 +127,7 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
               child: EasyDateTimeLinePicker(
                 focusedDate: _selectedDate,
                 firstDate: DateTime(2024, 3, 18),
-                lastDate: DateTime(2030, 3, 18),
+                lastDate: DateTime.now(),
                 onDateChange: (date) {
                   setState(() {
                     _selectedDate = date;

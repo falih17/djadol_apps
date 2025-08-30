@@ -148,7 +148,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
               child: EasyDateTimeLinePicker(
                 focusedDate: _selectedDate,
                 firstDate: DateTime(2024, 3, 18),
-                lastDate: DateTime(2030, 3, 18),
+                lastDate: DateTime.now(),
                 onDateChange: (date) {
                   setState(() {
                     _selectedDate = date;
@@ -166,7 +166,7 @@ class _JurnalListPageState extends State<JurnalListPage> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               color: Colors.purple[200],
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
