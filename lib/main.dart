@@ -2,9 +2,7 @@ import 'package:djadol_mobile/auth/login_page.dart';
 import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:flutter/material.dart';
 
-import 'auth/splash_page.dart';
 import 'core/utils/api_service.dart';
-import 'home.dart';
 
 void main() {
   // add this, and it should be the first line in main method
@@ -26,20 +24,21 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FutureBuilder(
-          future: checkToken(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              } else if (snapshot.hasData) {
-                return HomePage();
-              } else {
-                return LoginPage();
-              }
-            }
-            return SplashPage();
-          }),
+      home: LoginPage(),
+      // home: FutureBuilder(
+      //     future: checkToken(),
+      //     builder: (BuildContext context, AsyncSnapshot snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.done) {
+      //         if (snapshot.hasError) {
+      //           return Text(snapshot.error.toString());
+      //         } else if (snapshot.hasData) {
+      //           return HomePage();
+      //         } else {
+      //           return LoginPage();
+      //         }
+      //       }
+      //       return SplashPage();
+      //     }),
     );
   }
 }

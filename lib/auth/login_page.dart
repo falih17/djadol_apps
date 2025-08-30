@@ -20,8 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    username.text = 'sales1';
-    password.text = 'sales1';
+    username.text = '';
+    password.text = '';
   }
 
   @override
@@ -51,6 +51,8 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 4),
                   ZInput.password(
                     label: 'Password',
+                    hintText: 'password',
+
                     controller: password,
                     // autovalidateMode: AutovalidateMode.onUserInteraction,
                     // validator: (value) => 8 <= (value?.length ?? 0)

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/zui.dart';
@@ -22,7 +21,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
   String retailId = '';
   bool newRetail = false;
-  XFile? picture;
+  // XFile? picture;
   double? latitude;
   double? longitude;
 
@@ -65,9 +64,9 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
         'total_price': totalPrice,
         'detail': jsonEncode(cartItems),
       };
-      if (picture != null) {
-        data.addAll({'photo': multiPartFile(picture!.path)});
-      }
+      // if (picture != null) {
+      //   data.addAll({'photo': multiPartFile(picture!.path)});
+      // }
 
       await ApiService().post('/bulk/form_action/20', data, context: context);
       Navigator.pop(context, true);
@@ -217,10 +216,6 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                     if (!_formKey.currentState!.validate()) return;
                     if (retailId.isEmpty) {
                       ZToast.error(context, 'Toko harus diisi');
-                      return;
-                    }
-                    if (picture == null) {
-                      ZToast.error(context, 'Foto harus diisi');
                       return;
                     }
                     submit();
