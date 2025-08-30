@@ -141,7 +141,8 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
                       const SizedBox(height: 20),
                       ZButton(
-                        text: 'Tambah Produk',
+                        text: '+ Tambah Produk',
+                        radius: 20,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -163,6 +164,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                           final item = cartItems[index];
                           return ProductItem(
                             name: item.product.name,
+                            picture: item.product.picture,
                             quantity: item.quantity,
                             price: item.finalPrice,
                             subtotal: item.subtotal,
@@ -210,7 +212,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: ZButton(
-                  text: 'Submit',
+                  text: 'Simpan',
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) return;
                     submit();

@@ -55,6 +55,7 @@ class _RetailListPageState extends State<RetailListPage> {
   Widget widgetItemList(Retail i, int index) {
     return ProductCard(
       name: '${++index}. ${i.name}',
+      phone: i.phone,
       description: i.address,
       imageUrl: i.picture,
       onTap: () {

@@ -1,6 +1,7 @@
 class Product {
   final String id;
   final String name;
+  final String picture;
   final int pricePurchase;
   final int priceSale;
   final int priceAgen;
@@ -12,6 +13,7 @@ class Product {
   Product({
     required this.id,
     required this.name,
+    required this.picture,
     required this.pricePurchase,
     required this.priceSale,
     required this.priceAgen,
@@ -25,6 +27,7 @@ class Product {
     return Product(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
+      picture: map['picture'] ?? '',
       pricePurchase: int.tryParse(map['price_purchase']) ?? 0,
       priceSale: int.tryParse(map['price_sale']) ?? 0,
       priceAgen: int.tryParse(map['price_agen'] ?? '0') ?? 0,

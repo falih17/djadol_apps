@@ -50,6 +50,7 @@ class JurnalDetail {
   String retailId;
   String productName;
   String retailIdName;
+  String picture;
   int count;
   int price;
   int subtotal;
@@ -62,6 +63,7 @@ class JurnalDetail {
     required this.count,
     required this.price,
     required this.subtotal,
+    this.picture = '',
   });
 
   factory JurnalDetail.fromMap(Map<String, dynamic> map) {
@@ -74,6 +76,7 @@ class JurnalDetail {
       count: int.parse(map['count'] ?? '0'),
       price: int.parse(map['price'] ?? '0'),
       subtotal: int.parse(map['subtotal'] ?? '0'),
+      picture: map['picture'] ?? '',
     );
   }
 

@@ -26,6 +26,57 @@ class _HomePageState extends State<HomePage> {
   Future<void> cekGps() async {
     bool isActiveGps = await GeoLocation().check();
     if (!isActiveGps) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          contentPadding: const EdgeInsets.all(24),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.gps_off, color: Colors.redAccent, size: 48),
+              const SizedBox(height: 16),
+              Text(
+                'Tolong aktifkan GPS',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Aplikasi membutuhkan akses lokasi. Silakan aktifkan GPS pada perangkat Anda untuk melanjutkan.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.black54,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  // icon: const Icon(Icons.),
+                  label: const Text('Tutup'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // GeoLocation().openSettings();
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
       ZToast.error(context, 'Please enable GPS to continue');
     }
   }

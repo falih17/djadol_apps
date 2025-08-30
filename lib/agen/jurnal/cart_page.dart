@@ -47,6 +47,7 @@ class ProductItem extends StatelessWidget {
   final int quantity;
   final int price;
   final int subtotal;
+  final String picture;
   final VoidCallback onAdd;
   final VoidCallback onMinus;
   final VoidCallback onRemove;
@@ -57,6 +58,7 @@ class ProductItem extends StatelessWidget {
     required this.quantity,
     required this.price,
     required this.subtotal,
+    required this.picture,
     required this.onAdd,
     required this.onMinus,
     required this.onRemove,
@@ -70,11 +72,29 @@ class ProductItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(12),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // IconButton(
-            //   icon: Icon(Icons.delete, color: Colors.red),
-            //   onPressed: onRemove,
-            // ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: picture.isNotEmpty
+                  ? Image.network(
+                      picture,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 32,
+                      ),
+                    ),
+            ),
+            SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

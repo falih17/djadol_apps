@@ -1,7 +1,7 @@
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
+import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import 'package:djadol_mobile/core/widgets/zui.dart';
 
 import '../../core/utils/api_service.dart';
 import '../../core/widgets/flist_page.dart';
@@ -61,16 +61,88 @@ class _ProductListPageState extends State<ProductListPage> {
       onTap: () {
         Navigator.pop(context, i);
       },
-      child: Card(
-        child: ListTile(
-          title: Text(i.name),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Text(i.productIdName),
-              // Text(i.count),
-            ],
-          ),
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: i.picture.isNotEmpty
+                  ? Image.network(
+                      i.picture,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 60,
+                      height: 60,
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.image,
+                        color: Colors.grey,
+                        size: 32,
+                      ),
+                    ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    i.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        i.priceSale.toString().toCurrency(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.red,
+                        ),
+                      ),
+                      if (i.priceSale2 > 0) ...[
+                        Text(' | '),
+                        Text(
+                          i.priceSale2.toString().toCurrency(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                      if (i.priceSale3 > 0) ...[
+                        Text(' | '),
+                        Text(
+                          i.priceSale3.toString().toCurrency(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ]
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

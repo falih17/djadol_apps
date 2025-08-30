@@ -8,12 +8,14 @@ class ZButton extends StatelessWidget {
   final ButtonType buttonType;
   final VoidCallback? onPressed;
   final String text;
+  final double radius;
 
   const ZButton({
     super.key,
     this.buttonType = ButtonType.primary,
     this.onPressed,
     this.text = 'Press',
+    this.radius = 8.0,
   });
 
   @override
@@ -27,7 +29,7 @@ class ZButton extends StatelessWidget {
         // height: ScreenUtil().setHeight(48.0),
         decoration: BoxDecoration(
           color: getButtonColor(buttonType),
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(radius),
           boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(169, 176, 185, 0.42),
@@ -54,11 +56,11 @@ class ZButton extends StatelessWidget {
 Color getButtonColor(ButtonType type) {
   switch (type) {
     case ButtonType.primary:
-      return Constants.primaryColor;
+      return Constants.mColorBlue;
     case ButtonType.secondary:
       return Constants.secondary;
     default:
-      return Constants.primaryColor;
+      return Constants.mColorBlue;
   }
 }
 

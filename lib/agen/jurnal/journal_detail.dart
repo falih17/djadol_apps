@@ -1,6 +1,7 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/core/pages/async_value.dart';
 import 'package:djadol_mobile/core/pages/empty_page.dart';
+import 'package:djadol_mobile/core/utils/constans.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,6 @@ class JurnalDetailPage extends StatelessWidget {
         'jurnal_id': item.id,
       };
       List result = await ApiService().getList('/all/33', 0, 1000, data: data);
-      print(result);
       item.detail = result.map((i) => JurnalDetail.fromMap(i)).toList();
       return AsyncValue.success(item);
     } catch (e) {
@@ -48,18 +48,6 @@ class JurnalDetailPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Image.network(
-                //   value.photo,
-                //   height: 200,
-                //   width: 200,
-                //   fit: BoxFit.cover,
-                //   errorBuilder: (context, error, stackTrace) => Icon(
-                //     Icons.image,
-                //     color: Colors.grey,
-                //     size: 100,
-                //   ),
-                // ),
-                // const SizedBox(height: 20),
                 Text(item.retailIdName,
                     style:
                         TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
@@ -75,24 +63,60 @@ class JurnalDetailPage extends StatelessWidget {
                             final detail = value.detail[index];
                             return Card(
                               color: Colors.white,
-                              child: ListTile(
-                                title: Text(detail.productName,
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: detail.picture.isNotEmpty
+                                          ? Image.network(
+                                              detail.picture,
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Container(
+                                              width: 60,
+                                              height: 60,
+                                              color: Colors.grey[200],
+                                              child: const Icon(
+                                                Icons.image,
+                                                color: Colors.grey,
+                                                size: 32,
+                                              ),
+                                            ),
                                     ),
-                                ),
-                                subtitle: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        '${detail.count} x ${detail.price.toString().toCurrency()}'),
-                                        Text('${(detail.subtotal * -1).toString().toCurrency()}',
+                                  ),
+                                  Flexible(
+                                    child: ListTile(
+                                      title: Text(
+                                        detail.productName,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                              '${detail.count} x ${detail.price.toString().toCurrency()}'),
+                                          Text(
+                                            (detail.subtotal * -1)
+                                                .toString()
+                                                .toCurrency(),
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.purple)),
-                                  ],
-                                ),
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Constants.mColorBlue,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },

@@ -40,6 +40,7 @@ class ZCard extends StatelessWidget {
 
 class ProductCard extends StatelessWidget {
   final String name;
+  final String phone;
   final String description;
   final String imageUrl;
   final VoidCallback onTap;
@@ -52,6 +53,7 @@ class ProductCard extends StatelessWidget {
     required this.imageUrl,
     required this.onTap,
     this.onLongPress,
+    required this.phone,
   });
 
   @override
@@ -83,7 +85,7 @@ class ProductCard extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.all(15),
-              height: 100,
+              height: 120,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -96,8 +98,8 @@ class ProductCard extends StatelessWidget {
                         ),
                   ),
                   const SizedBox(height: 8),
-
-                  // Description
+                  Text('Hp : ${(phone.isEmpty) ? '-' : phone}'),
+                  const SizedBox(height: 8),
                   Text(
                     description,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
