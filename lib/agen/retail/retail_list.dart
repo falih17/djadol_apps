@@ -1,3 +1,5 @@
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
+import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -16,6 +18,8 @@ class RetailListPage extends StatefulWidget {
 }
 
 class _RetailListPageState extends State<RetailListPage> {
+  String totalToko = '0';
+
   static const _pageSize = 40;
   late final _pagingController = PagingController<int, Retail>(
     getNextPageKey: (state) {
@@ -35,9 +39,25 @@ class _RetailListPageState extends State<RetailListPage> {
     super.initState();
   }
 
+  void initData() {
+    getTotal();
+    _pagingController.refresh();
+  }
+
+  Future<void> getTotal() async {
+    // api/api_cust
+    var result = await ApiService().post('/act/totaltokobyagen', {});
+    setState(() {
+      totalToko = result.data['total'] ?? '0';
+    });
+  }
+
   Future<List<Retail>> fetchPage(int page) async {
     try {
-      Map<String, dynamic> params = {'name': _searchTerm};
+      Map<String, dynamic> params = {
+        'name': _searchTerm,
+        'created_by': Store().userId,
+      };
       List result =
           await ApiService().getList('/all/31', page, _pageSize, data: params);
       return result.map((i) => Retail.fromMap(i)).toList();
@@ -49,7 +69,7 @@ class _RetailListPageState extends State<RetailListPage> {
 
   Future<void> delete(String id) async {
     await ApiService().delete('Retail', id, context: context);
-    _pagingController.refresh();
+    initData();
   }
 
   Widget widgetItemList(Retail i, int index) {
@@ -85,7 +105,7 @@ class _RetailListPageState extends State<RetailListPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Retail'),
+          title: const Text('Toko'),
           actions: [
             IconButton(
               icon: Icon(
@@ -117,6 +137,10 @@ class _RetailListPageState extends State<RetailListPage> {
                     widgetItemList(item, index),
               ),
             ),
+            InfoButtomBar(
+              leftText: 'Total Toko : ',
+              rightText: totalToko.toCurrency(),
+            ),
           ],
         ),
         floatingActionButton: FloatingButtonCenter(
@@ -127,7 +151,7 @@ class _RetailListPageState extends State<RetailListPage> {
                 builder: (context) => const RetailAddPage(),
               ),
             ).then((v) {
-              if (v != null) _pagingController.refresh();
+              if (v != null) initData();
             });
           },
         ),

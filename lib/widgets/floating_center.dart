@@ -40,3 +40,40 @@ class FloatingButtonCenter extends StatelessWidget {
     );
   }
 }
+
+class InfoButtomBar extends StatelessWidget {
+  const InfoButtomBar({
+    super.key,
+    required this.rightText,
+    required this.leftText,
+  });
+
+  final String leftText;
+  final String rightText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      color: Colors.blue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            leftText,
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            rightText,
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
+    );
+  }
+}

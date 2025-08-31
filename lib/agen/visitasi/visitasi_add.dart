@@ -1,4 +1,3 @@
-import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -70,41 +69,36 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                         cameraOnly: true,
                       ),
 
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: ZInputSelect(
-                              label: 'Toko',
-                              url: '/all/31',
-                              onChanged: (v) {
-                                retailId = v;
-                              },
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          if (newRetail)
-                            ZIconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const RetailAddPage(),
-                                  ),
-                                );
-                              },
-                            ),
-                        ],
+                      ZInputSelect(
+                        label: 'Toko',
+                        url: '/all/31',
+                        onChanged: (v) {
+                          retailId = v;
+                        },
                       ),
-                      ZInputSwitch(
-                          label: "Pertama kali kunjungan",
-                          value: newRetail,
-                          onChanged: (v) {
-                            setState(() {
-                              newRetail = v;
-                            });
-                          }),
-                      const SizedBox(height: 10),
+                      // ZInputSwitch(
+                      //     label: "Pertama kali kunjungan",
+                      //     value: newRetail,
+                      //     onChanged: (v) {
+                      //       setState(() {
+                      //         newRetail = v;
+                      //       });
+                      //     }),
+                      // const SizedBox(height: 10),
+                      SizedBox(height: 10),
+
+                      ZButton(
+                        text: '+ Tambah toko',
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const VisitasiAddPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(height: 10),
                       GeoWidget(
                         onChanged: (value) {
                           latitude = value.latitude;

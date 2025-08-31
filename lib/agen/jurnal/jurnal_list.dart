@@ -165,29 +165,9 @@ class _JurnalListPageState extends State<JurnalListPage> {
                     widgetItemList(item, index),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              color: Colors.purple[200],
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total Sales : ',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    totalSales.toCurrency(),
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
+            InfoButtomBar(
+              leftText: 'Total Sales : ',
+              rightText: totalSales.toCurrency(),
             ),
           ],
         ),
@@ -199,7 +179,10 @@ class _JurnalListPageState extends State<JurnalListPage> {
                 builder: (context) => const JurnalAddPage(),
               ),
             ).then((v) {
-              if (v != null) _pagingController.refresh();
+              if (v != null) {
+                _pagingController.refresh();
+                getTotal();
+              }
             });
           },
         ),
