@@ -37,6 +37,7 @@ class _RetailListPageState extends State<RetailListPage> {
   @override
   void initState() {
     super.initState();
+    getTotal();
   }
 
   void initData() {

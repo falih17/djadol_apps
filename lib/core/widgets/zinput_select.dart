@@ -3,6 +3,8 @@ import 'zinput_search.dart';
 import 'zinput_style.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:djadol_mobile/core/utils/store.dart';
+
 
 import '../utils/api_service.dart';
 import 'flist_page.dart';
@@ -144,7 +146,7 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
     int page,
   ) async {
     try {
-      var data = {'name': _searchTerm};
+      var data = {'name': _searchTerm,'created_by':Store().userId};
       List<dynamic> newItems =
           await ApiService().getList(widget.url, page, _pageSize, data: data);
       return newItems;
