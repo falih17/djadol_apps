@@ -15,8 +15,8 @@ class FloatingButtonCenter extends StatelessWidget {
       child: Align(
         alignment: Alignment.bottomCenter,
         child: SizedBox(
-          height: 40,
-          width: 200, // Reduced height
+          height: 35,
+          width: 100, // Reduced height
           child: FloatingActionButton.extended(
             backgroundColor: Colors.blue,
             shape: RoundedRectangleBorder(
@@ -31,7 +31,7 @@ class FloatingButtonCenter extends StatelessWidget {
             label: const Text(
               'Tambah',
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                   color: Colors.white), // Optionally reduce font size
             ),
           ),
