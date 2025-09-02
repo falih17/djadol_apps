@@ -23,7 +23,7 @@ String? numberValidation(String? value) {
   // return value?.contains('@') ?? false ? null : 'Please enter a valid email.';
 }
 
-class ZInput extends StatelessWidget {
+class ZInput extends StatefulWidget {
   final TextEditingController? controller;
   final String? label;
   final String? hintText;
@@ -35,6 +35,7 @@ class ZInput extends StatelessWidget {
   final double borderRadius;
   final int maxLines;
   final String? Function(String?)? validator;
+  final bool isPassword;
 
   const ZInput({
     super.key,
@@ -49,6 +50,7 @@ class ZInput extends StatelessWidget {
     this.borderRadius = 8.0,
     this.maxLines = 1,
     this.validator,
+    this.isPassword = false,
   });
 
   const ZInput.password({
@@ -64,6 +66,7 @@ class ZInput extends StatelessWidget {
     this.onTap,
     this.maxLines = 1,
     this.required = false,
+    this.isPassword = true,
   });
 
   const ZInput.email({
@@ -79,6 +82,7 @@ class ZInput extends StatelessWidget {
     this.onTap,
     this.maxLines = 1,
     this.required = false,
+    this.isPassword = false,
   });
 
   const ZInput.number({
@@ -94,6 +98,7 @@ class ZInput extends StatelessWidget {
     this.onTap,
     this.maxLines = 1,
     this.required = false,
+    this.isPassword = false,
   });
 
   const ZInput.date({
@@ -109,47 +114,54 @@ class ZInput extends StatelessWidget {
     this.onTap,
     this.maxLines = 1,
     this.required = false,
+    this.isPassword = false,
   });
+
+  @override
+  State<ZInput> createState() => _ZInputState();
+}
+
+class _ZInputState extends State<ZInput> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (label != null) ...[ZInputLabel(label: label, required: required)],
+        if (widget.label != null) ...[
+          ZInputLabel(label: widget.label, required: widget.required)
+        ],
         ZInputContainer(
-          // margin: const EdgeInsets.symmetric(vertical: 10),
-          // width: double.infinity,
-          // height: ScreenUtil().setHeight(50.0),
-          // decoration: BoxDecoration(
-          //   color: Colors.white,
-          //   borderRadius: BorderRadius.circular(borderRadius),
-          //   boxShadow: const [
-          //     BoxShadow(
-          //       color: Color.fromRGBO(169, 176, 185, 0.42),
-          //       spreadRadius: 0,
-          //       blurRadius: 8,
-          //       offset: Offset(0, 2), // changes position of shadow
-          //     ),
-          //   ],
-          // ),
           child: TextFormField(
-            onTap: onTap,
-            validator: (required) ? requiredValidation : validator,
-            controller: controller,
-            obscureText: obscureText,
-            maxLines: maxLines,
+            onTap: widget.onTap,
+            validator: (widget.required) ? requiredValidation : widget.validator,
+            controller: widget.controller,
+            obscureText: _obscureText,
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
-              prefixIcon: prefixIcon,
+              prefixIcon: widget.prefixIcon,
               prefixIconConstraints: const BoxConstraints(minWidth: 0.0),
-              suffixIcon: suffixIcon,
-              // fillColor: Colors.white,
-              // filled: true,
-              // border: OutlineInputBorder(
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    )
+                  : widget.suffixIcon,
               border: InputBorder.none,
-              hintText: hintText,
+              hintText: widget.hintText,
               hintStyle: const TextStyle(
                 fontSize: 14.0,
                 color: Color.fromRGBO(169, 176, 185, 1),

@@ -16,12 +16,22 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool _rememberMe = false;
 
   @override
   void initState() {
     super.initState();
-    username.text = '';
-    password.text = '';
+    _loadUsername();
+  }
+
+  Future<void> _loadUsername() async {
+    final storedUsername = await Store().getUsername();
+    if (storedUsername != null) {
+      setState(() {
+        username.text = storedUsername;
+        _rememberMe = true;
+      });
+    }
   }
 
   @override
@@ -52,12 +62,24 @@ class _LoginPageState extends State<LoginPage> {
                   ZInput.password(
                     label: 'Password',
                     hintText: 'password',
-
                     controller: password,
                     // autovalidateMode: AutovalidateMode.onUserInteraction,
                     // validator: (value) => 8 <= (value?.length ?? 0)
                     //     ? null
                     //     : 'Password must be at least 8 characters long.',
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() {
+                            _rememberMe = value!;
+                          });
+                        },
+                      ),
+                      const Text('Remember me'),
+                    ],
                   ),
                   const SizedBox(height: 30),
                   ZButton(
@@ -77,6 +99,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> dataPost() async {
+    if (_rememberMe) {
+      await Store().setUsername(username.text);
+    } else {
+      await Store().clearUsername();
+    }
+
     final body = <String, dynamic>{
       "username": username.text,
       "password": password.text,
