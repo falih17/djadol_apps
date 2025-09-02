@@ -1,3 +1,5 @@
+import 'package:djadol_mobile/agen/retail/retail.dart';
+import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -93,7 +95,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const VisitasiAddPage(),
+                              builder: (context) => const RetailAddPage(),
                             ),
                           );
                         },
@@ -132,7 +134,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: ZButton(
-                  text: 'Submit',
+                  text: 'Simpan Visitasi',
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) return;
                     if (retailId.isEmpty) {
