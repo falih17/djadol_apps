@@ -171,20 +171,24 @@ class _JurnalListPageState extends State<JurnalListPage> {
             ),
           ],
         ),
-        floatingActionButton: FloatingButtonCenter(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const JurnalAddPage(),
-              ),
-            ).then((v) {
-              if (v != null) {
-                _pagingController.refresh();
-                getTotal();
-              }
-            });
-          },
-        ),
+        floatingActionButton: _selectedDate.day == DateTime.now().day &&
+                _selectedDate.month == DateTime.now().month &&
+                _selectedDate.year == DateTime.now().year
+            ? FloatingButtonCenter(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const JurnalAddPage(),
+                    ),
+                  ).then((v) {
+                    if (v != null) {
+                      _pagingController.refresh();
+                      getTotal();
+                    }
+                  });
+                },
+              )
+            : null,
       );
 }

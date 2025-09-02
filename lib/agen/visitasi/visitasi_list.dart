@@ -154,24 +154,27 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
                 ),
                 trailing: Text(
                     '${_pagingController.items?.length ?? 0} /$countTotal'),
-                // linearStrokeCap: LinearStrokeCap.roundAll,
                 backgroundColor: Colors.grey,
                 progressColor: Theme.of(context).colorScheme.primary,
               ),
             ),
           ],
         ),
-        floatingActionButton: FloatingButtonCenter(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const VisitasiAddPage(),
-              ),
-            ).then((v) {
-              if (v != null) _pagingController.refresh();
-            });
-          },
-        ),
+        floatingActionButton: _selectedDate.day == DateTime.now().day &&
+                _selectedDate.month == DateTime.now().month &&
+                _selectedDate.year == DateTime.now().year
+            ? FloatingButtonCenter(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VisitasiAddPage(),
+                    ),
+                  ).then((v) {
+                    if (v != null) _pagingController.refresh();
+                  });
+                },
+              )
+            : null,
       );
 }
