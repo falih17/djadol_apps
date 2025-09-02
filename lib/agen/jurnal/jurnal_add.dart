@@ -55,24 +55,31 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
   int get totalPrice => cartItems.fold(0, (sum, item) => sum + (item.subtotal));
 
   Future<void> submit() async {
-    try {
-      Map<String, dynamic> data = {
-        'retail_id': retailId,
-        'status': 'out',
-        'latlong': '$latitude,$longitude',
-        'is_new': newRetail ? '1' : '0',
-        'total_price': totalPrice,
-        'detail': jsonEncode(cartItems),
-      };
-      // if (picture != null) {
-      //   data.addAll({'photo': multiPartFile(picture!.path)});
-      // }
+    bool isConfirm = await confirm(
+      context,
+      title: Text('Yakin menyimpan penjualan?'),
+    );
+    if (isConfirm) {
+      try {
+        Map<String, dynamic> data = {
+          'retail_id': retailId,
+          'status': 'out',
+          'latlong': '$latitude,$longitude',
+          'is_new': newRetail ? '1' : '0',
+          'total_price': totalPrice,
+          'detail': jsonEncode(cartItems),
+        };
+        // if (picture != null) {
+        //   data.addAll({'photo': multiPartFile(picture!.path)});
+        // }
 
-      await ApiService().post('/bulk/form_action/20', data, context: context);
-      Navigator.pop(context, true);
-    } catch (e) {
-      ZToast.error(context, 'Sorry something wrong');
+        await ApiService().post('/bulk/form_action/20', data, context: context);
+        Navigator.pop(context, true);
+      } catch (e) {
+        ZToast.error(context, 'Sorry something wrong');
+      }
     }
+    
   }
 
   @override
