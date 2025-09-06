@@ -5,6 +5,7 @@ import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 
+import 'agen/inquiry/inquiry_list.dart';
 import 'agen/jurnal/jurnal_list.dart';
 import 'agen/retail/retail_list.dart';
 import 'core/geo_location/geo_location.dart';
@@ -190,6 +191,17 @@ class _HomePageState extends State<HomePage> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const RetailListPage(),
+                        ),
+                      ),
+                    ),
+                    MenuCardHorizontal(
+                      title: 'Ploting Barang',
+                      description: 'Terima barang dari warehouse',
+                      icon: Icons.inventory_2,
+                      gradient: gradient,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => InquiryListPage(),
                         ),
                       ),
                     ),
