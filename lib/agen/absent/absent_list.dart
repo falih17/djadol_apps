@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -65,7 +66,7 @@ class _AbsentListPageState extends State<AbsentListPage> {
               Row(
                 children: [
                   Text("Tanggal : ", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(i.createdAt.split(' ').first),
+                  Text(i.createdAt.toDateMMM()),
                 ],
               ), // Tanggal
               Row(

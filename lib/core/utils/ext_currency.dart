@@ -43,4 +43,28 @@ extension StringFormatter on String {
       return this;
     }
   }
+
+  String toDateMMM() {
+    try {
+      DateTime date = DateTime.parse(this);
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      String monthName = monthNames[date.month - 1];
+      return "${date.day} $monthName ${date.year}";
+    } catch (e) {
+      return this;
+    }
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:djadol_mobile/agen/retail/retail.dart';
 import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

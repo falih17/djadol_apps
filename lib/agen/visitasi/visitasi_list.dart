@@ -1,3 +1,4 @@
+import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:djadol_mobile/core/utils/ext_date.dart';
 import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
@@ -87,7 +88,7 @@ class _VisitasiListPageState extends State<VisitasiListPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Tanggal: ${i.createdAt.split(' ')[0]}'),
+                      Text('Tanggal: ${i.createdAt.toDateMMM()}'),
                       Text(
                           'Waktu: ${i.createdAt.split(' ').length > 1 ? i.createdAt.split(' ')[1] : ''}'),
                     ],
