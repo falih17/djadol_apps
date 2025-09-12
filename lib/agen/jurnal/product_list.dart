@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../core/utils/api_service.dart';
+import '../../core/utils/store.dart';
 import '../../core/widgets/flist_page.dart';
 import 'product_model.dart';
 
@@ -39,10 +40,11 @@ class _ProductListPageState extends State<ProductListPage> {
       Map<String, dynamic> params = {
         'page': page,
         'size': _pageSize,
-        'name': _searchTerm
+        'name': _searchTerm,
+        'agen_id':Store().userId
       };
       List result =
-          await ApiService().getList('/all/30', page, _pageSize, data: params);
+          await ApiService().getList('/all/39', page, _pageSize, data: params);
       List<Product> newItems = result.map((i) => Product.fromMap(i)).toList();
       return newItems;
     } catch (error) {
@@ -61,88 +63,93 @@ class _ProductListPageState extends State<ProductListPage> {
       onTap: () {
         Navigator.pop(context, i);
       },
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: i.picture.isNotEmpty
-                  ? Image.network(
-                      i.picture,
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      width: 60,
-                      height: 60,
-                      color: Colors.grey[200],
-                      child: const Icon(
-                        Icons.image,
-                        color: Colors.grey,
-                        size: 32,
-                      ),
-                    ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    i.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        i.priceSale.toString().toCurrency(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.red,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: i.picture.isNotEmpty
+                    ? Image.network(
+                        i.picture,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        width: 60,
+                        height: 60,
+                        color: Colors.grey[200],
+                        child: const Icon(
+                          Icons.image,
+                          color: Colors.grey,
+                          size: 32,
                         ),
                       ),
-                      if (i.priceSale2 > 0) ...[
-                        Text(' | '),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      i.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              i.priceSale.toString().toCurrency(),
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.red,
+                              ),
+                            ),
+                            if (i.priceSale2 > 0) ...[
+                              Text(' | '),
+                              Text(
+                                i.priceSale2.toString().toCurrency(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                            if (i.priceSale3 > 0) ...[
+                              Text(' | '),
+                              Text(
+                                i.priceSale3.toString().toCurrency(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ]
+                          ],
+                        ),
                         Text(
-                          i.priceSale2.toString().toCurrency(),
+                          'Stok: ${i.count}',
                           style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.green,
+                            fontSize: 16,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
-                      if (i.priceSale3 > 0) ...[
-                        Text(' | '),
-                        Text(
-                          i.priceSale3.toString().toCurrency(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ]
-                    ],
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

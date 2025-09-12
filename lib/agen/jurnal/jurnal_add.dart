@@ -39,10 +39,16 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
   void updateQuantity(int index, int change) {
     setState(() {
+
       final item = cartItems[index];
       item.quantity += change;
-      // if (item.quantity < 1) item.quantity = 1;
-      if (item.quantity < 1) cartItems.removeAt(index);
+      if(item.quantity >= item.product.count){
+        item.quantity = item.product.count;
+        // if (item.quantity < 1) item.quantity = 1;
+      }
+      
+        if (item.quantity < 1) cartItems.removeAt(index);
+      
     });
   }
 
