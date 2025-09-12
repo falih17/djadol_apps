@@ -33,7 +33,7 @@ class CartItem {
   Map<String, dynamic> toJson() {
     return {
       "product_name": product.name,
-      "product_id": product.id,
+      "product_id": product.productId,
       "count": quantity,
       "price": product.priceSale,
       "subtotal": subtotal * -1,

@@ -41,7 +41,8 @@ class _ProductListPageState extends State<ProductListPage> {
         'page': page,
         'size': _pageSize,
         'name': _searchTerm,
-        'agen_id':Store().userId
+        'count_min': 1,
+        'agen_id': Store().userId
       };
       List result =
           await ApiService().getList('/all/39', page, _pageSize, data: params);
