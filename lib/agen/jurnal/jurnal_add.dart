@@ -32,6 +32,11 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
   List<CartItem> cartItems = [];
   void addItem(Product item) {
+    if (cartItems
+        .any((element) => element.product.productId == item.productId)) {
+      ZToast.warning(context, 'Produk sudah ada di keranjang');
+      return;
+    }
     setState(() {
       cartItems.add(CartItem(product: item, quantity: 1));
     });
