@@ -238,6 +238,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                
                 MenuCardHorizontal(
                   title: 'Stock',
                   description: 'Stock produk di agen',
@@ -271,6 +272,57 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: MenuCardVertical(
+                        icon: Icons.exit_to_app,
+                        title: 'Logout',
+                        gradient: [
+                          const Color.fromARGB(255, 12, 113, 229),
+                          Colors.red.shade300,
+                        ],
+                        onTap: () async {
+                          confirmDanger(
+                            context,
+                            title: 'Logout',
+                          ).then((value) async {
+                            if (value) {
+                              await Store().clearToken();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: MenuCardVertical(
+                        icon: Icons.person,
+                        title: 'Profil',
+                        gradient: [
+                          const Color.fromARGB(255, 12, 113, 229),
+                          Colors.orange.shade300,
+                        ],
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AbsentListPage(
+                              type: false,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                ,
                 MenuCardHorizontal(
                   title: 'Logout',
                   description: 'Keluar dari aplikasi',
