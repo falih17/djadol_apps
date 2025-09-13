@@ -113,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final r = await ApiService().post('/auth/login', body, context: context);
       Store().setToken(r.data['token'], r.data['user_id']);
+      await Store().setFullName(r.data['full_name']); // add this line
 
       Navigator.pushReplacement(
         context,

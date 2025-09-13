@@ -10,16 +10,19 @@ class Store {
   String? _token;
   String? _userId;
   String? _username;
+  String? _fullName;
 
   String? get token => _token;
   String? get userId => _userId;
   String? get username => _username;
+  String? get fullName => _fullName;
 
   Future<void> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('token');
     _userId = prefs.getString('userid');
     _username = prefs.getString('username');
+    _fullName = prefs.getString('full_name');
     if (_token != null) {
       ApiService().setToken(_token!);
     }
@@ -40,6 +43,23 @@ class Store {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('username');
     _username = null;
+  }
+
+  Future<void> setFullName(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('full_name', value);
+    _fullName = value;
+  }
+
+  Future<String?> getFullName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('full_name');
+  }
+
+  Future<void> clearFullName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('full_name');
+    _fullName = null;
   }
 
   Future<void> setToken(String v, String c) async {

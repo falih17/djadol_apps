@@ -1,4 +1,5 @@
 import 'package:djadol_mobile/agen/absent/absent_list.dart';
+import 'package:djadol_mobile/agen/jurnal/stock_product_list.dart';
 import 'package:djadol_mobile/agen/visitasi/visitasi_list.dart';
 import 'package:djadol_mobile/auth/login_page.dart';
 import 'package:djadol_mobile/core/utils/store.dart';
@@ -92,144 +93,207 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text('Absensi',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: MenuCardVertical(
-                            icon: Icons.gps_fixed,
-                            title: 'Masuk',
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const AbsentListPage(
-                                  type: true,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Flexible(
-                          child: MenuCardVertical(
-                            icon: Icons.gps_off,
-                            title: 'Pulang',
-                            gradient: [
-                              Colors.red.shade500,
-                              Colors.orange.shade300,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.shade400,
+                              Colors.purple.shade300
                             ],
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const AbsentListPage(
-                                  type: false,
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 28,
+                          backgroundColor: Colors.transparent,
+                          child:
+                              Icon(Icons.person, color: Colors.white, size: 32),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Welcome,',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ),
+                          ),
+                          Text(
+                            Store().fullName ?? 'User',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Absensi',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(fontWeight: FontWeight.bold)),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: MenuCardVertical(
+                        icon: Icons.gps_fixed,
+                        title: 'Masuk',
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AbsentListPage(
+                              type: true,
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text('Menu',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Flexible(
+                      child: MenuCardVertical(
+                        icon: Icons.gps_off,
+                        title: 'Pulang',
+                        gradient: [
+                          Colors.red.shade500,
+                          Colors.orange.shade300,
                         ],
-                      ),
-                    ),
-                    MenuCardHorizontal(
-                      title: 'Sales',
-                      description: 'Transaksi penjualan produk',
-                      icon: Icons.production_quantity_limits,
-                      gradient: gradient,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const JurnalListPage(),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const AbsentListPage(
+                              type: false,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    MenuCardHorizontal(
-                      title: 'Kunjungan',
-                      description: 'Daftar kunjungan agen',
-                      icon: Icons.directions_walk_sharp,
-                      gradient: gradient,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const VisitasiListPage(),
-                        ),
-                      ),
-                    ),
-                    MenuCardHorizontal(
-                      title: 'Toko',
-                      description: 'Tambah dan daftar toko',
-                      icon: Icons.store,
-                      gradient: gradient,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RetailListPage(),
-                        ),
-                      ),
-                    ),
-                    MenuCardHorizontal(
-                      title: 'Ploting Barang',
-                      description: 'Terima barang dari warehouse',
-                      icon: Icons.inventory_2,
-                      gradient: gradient,
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => InquiryListPage(),
-                        ),
-                      ),
-                    ),
-                    MenuCardHorizontal(
-                      title: 'Logout',
-                      description: 'Keluar dari aplikasi',
-                      gradient: gradient,
-                      icon: Icons.exit_to_app,
-                      onTap: () async {
-                        confirmDanger(
-                          context,
-                          title: 'Logout',
-                        ).then((value) async {
-                          if (value) {
-                            await Store().clearToken();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                            );
-                          }
-                        });
-                      },
                     ),
                   ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text('Menu',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Sales',
+                  description: 'Transaksi penjualan produk',
+                  icon: Icons.production_quantity_limits,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const JurnalListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Kunjungan',
+                  description: 'Daftar kunjungan agen',
+                  icon: Icons.directions_walk_sharp,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const VisitasiListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Stock',
+                  description: 'Stock produk di agen',
+                  icon: Icons.inventory,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const StockProductListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Ploting Barang',
+                  description: 'Terima barang dari warehouse',
+                  icon: Icons.inventory_2,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => InquiryListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Toko',
+                  description: 'Tambah dan daftar toko',
+                  icon: Icons.store,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const RetailListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Logout',
+                  description: 'Keluar dari aplikasi',
+                  gradient: gradient,
+                  icon: Icons.exit_to_app,
+                  onTap: () async {
+                    confirmDanger(
+                      context,
+                      title: 'Logout',
+                    ).then((value) async {
+                      if (value) {
+                        await Store().clearToken();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                        );
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
