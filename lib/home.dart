@@ -2,6 +2,7 @@ import 'package:djadol_mobile/agen/absent/absent_list.dart';
 import 'package:djadol_mobile/agen/jurnal/stock_product_list.dart';
 import 'package:djadol_mobile/agen/visitasi/visitasi_list.dart';
 import 'package:djadol_mobile/auth/login_page.dart';
+import 'package:djadol_mobile/auth/profile_page.dart';
 import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
@@ -238,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                
+
                 MenuCardHorizontal(
                   title: 'Stock',
                   description: 'Stock produk di agen',
@@ -306,15 +307,14 @@ class _HomePageState extends State<HomePage> {
                     Flexible(
                       child: MenuCardVertical(
                         icon: Icons.person,
-                        title: 'Profil',
+                        title: 'Password',
                         gradient: [
                           const Color.fromARGB(255, 12, 113, 229),
                           Colors.orange.shade300,
                         ],
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const AbsentListPage(
-                              type: false,
+                            builder: (context) => const ProfilePage(
                             ),
                           ),
                         ),
@@ -323,27 +323,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 )
                 ,
-                MenuCardHorizontal(
-                  title: 'Logout',
-                  description: 'Keluar dari aplikasi',
-                  gradient: gradient,
-                  icon: Icons.exit_to_app,
-                  onTap: () async {
-                    confirmDanger(
-                      context,
-                      title: 'Logout',
-                    ).then((value) async {
-                      if (value) {
-                        await Store().clearToken();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
-                        );
-                      }
-                    });
-                  },
-                ),
+               
               ],
             ),
           ),
