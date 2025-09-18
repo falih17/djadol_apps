@@ -14,6 +14,7 @@ class ZInputSelect extends StatefulWidget {
   final String url;
   final String vKey;
   final String vData;
+  final String? vDesc;
   final String? id;
   final String? vDisplay;
 
@@ -25,6 +26,7 @@ class ZInputSelect extends StatefulWidget {
     required this.onChanged,
     this.vKey = 'id',
     this.vData = 'name',
+    this.vDesc,
     this.id,
     this.vDisplay,
   });
@@ -86,6 +88,7 @@ class _ZInputSelectState extends State<ZInputSelect> {
                       url: widget.url,
                       vKey: widget.vKey,
                       vData: widget.vData,
+                      vDesc: widget.vDesc,
                     ),
                   ),
                 ).then((v) {
@@ -110,12 +113,14 @@ class ZInputSelectPage extends StatefulWidget {
   final String url;
   final String vKey;
   final String vData;
+  final String? vDesc;
   const ZInputSelectPage({
     super.key,
     required this.title,
     required this.url,
     required this.vKey,
     required this.vData,
+    this.vDesc,
   });
 
   @override
@@ -161,7 +166,7 @@ class _ZInputSelectPageState extends State<ZInputSelectPage> {
       onTap: () {
         Navigator.pop(context, i);
       },
-      child: ZCard(title: i[widget.vData]),
+      child: ZCard(title: i[widget.vData],subtitle:(widget.vDesc != null)?i[widget.vDesc] :null,),
     );
   }
 

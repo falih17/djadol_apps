@@ -127,6 +127,7 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
                             child: ZInputSelect(
                               label: 'Toko',
                               url: '/all/31',
+                              vDesc: 'address',
                               onChanged: (v) {
                                 retailId = v;
                               },

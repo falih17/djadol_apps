@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
+  bool _isLoadingProfile = true;
 
   @override
   void initState() {
@@ -33,25 +34,31 @@ class _ProfilePageState extends State<ProfilePage> {
       _fullnameController.text = result['full_name'] ?? '';
       _phoneController.text = result['phone'] ?? '';
     }
+    setState(() {
+      _isLoadingProfile =false;
+    });
+
   }
 
   Future<void> _saveProfile() async {
+    
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
     var data = {
       'id': Store().userId,
-      'form_id': 40,
+      'form_id': 47,
       'full_name': _fullnameController.text,
       'phone': _phoneController.text,
     };
-
+    try {
+      
     var result = await ApiService().post('/api/form_action', data, context: context);
+    } catch (e) {
+      
+    }
     setState(() => _isLoading = false);
 
-    // if (result.success) {
-      Navigator.pop(context, true);
-    // }
   }
 
   Future<void> _password() async {
@@ -81,31 +88,32 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text('Edit Password')),
+        appBar: AppBar(title: const Text('Profile')),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                // ZInput(
-                //   controller: _fullnameController,
-                //   label: 'Fullname',
-                //   validator: (v) =>
-                //       v == null || v.isEmpty ? 'Fullname required' : null,
-                // ),
-                // const SizedBox(height: 16),
-                // ZInput(
-                //   controller: _phoneController,
-                //   label: 'Phone',
-                //   validator: (v) =>
-                //       v == null || v.isEmpty ? 'Phone required' : null,
-                // ),
-                // ZButton(
-                //   text: _isLoading ? 'Saving...' : 'Save',
-                //   onPressed: _isLoading ? null : _saveProfile,
-                // ),
-                // const SizedBox(height: 16),
+                if(_isLoadingProfile) LinearProgressIndicator(),
+                ZInput(
+                  controller: _fullnameController,
+                  label: 'Fullname',
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Fullname required' : null,
+                ),
+                const SizedBox(height: 16),
+                ZInput(
+                  controller: _phoneController,
+                  label: 'Phone',
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Phone required' : null,
+                ),
+                ZButton(
+                  text: _isLoading ? 'Saving...' : 'Save',
+                  onPressed: _isLoading ? null : _saveProfile,
+                ),
+                const SizedBox(height: 16),
                 ZInput.password(
                   controller: _passwordOldController,
                   label: 'Password Lama',

@@ -30,7 +30,7 @@ class ZCard extends StatelessWidget {
               ? Icon(icon)
               : Text(title.isEmpty ? '@' : title[0].toUpperCase()),
         ),
-        title: Text(title),
+        title: Text(title,style: TextStyle(fontWeight: FontWeight.bold),),
         subtitle: subtitle != null ? Text(subtitle!) : null,
         trailing: const Icon(
           Icons.arrow_forward_ios,

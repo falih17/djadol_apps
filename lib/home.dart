@@ -307,7 +307,7 @@ class _HomePageState extends State<HomePage> {
                     Flexible(
                       child: MenuCardVertical(
                         icon: Icons.person,
-                        title: 'Password',
+                        title: 'Profile',
                         gradient: [
                           const Color.fromARGB(255, 12, 113, 229),
                           Colors.orange.shade300,
