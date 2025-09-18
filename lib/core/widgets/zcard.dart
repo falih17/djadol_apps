@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ZCard extends StatelessWidget {
   final String title;
+  final String? subtitle;
   final Color? color;
   final Color? textColor;
   final IconData? icon;
@@ -11,6 +12,7 @@ class ZCard extends StatelessWidget {
     this.color,
     this.textColor,
     this.icon,
+    this.subtitle,
   });
 
   @override
@@ -29,6 +31,7 @@ class ZCard extends StatelessWidget {
               : Text(title.isEmpty ? '@' : title[0].toUpperCase()),
         ),
         title: Text(title),
+        subtitle: subtitle != null ? Text(subtitle!) : null,
         trailing: const Icon(
           Icons.arrow_forward_ios,
           color: Colors.grey,
