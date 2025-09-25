@@ -137,6 +137,10 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                   text: 'Simpan Visitasi',
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) return;
+                    if(latitude == null ){
+                      ZToast.error(context, 'Lokasi tidak ditemukan');
+                      return;
+                    }
                     if (retailId.isEmpty) {
                       ZToast.error(context, 'Toko harus diisi');
                       return;
