@@ -78,6 +78,18 @@ class _ProductListPageState extends State<ProductListPage> {
                         width: 60,
                         height: 60,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 60,
+                            height: 60,
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.broken_image,
+                              color: Colors.grey,
+                              size: 32,
+                            ),
+                          );
+                        },
                       )
                     : Container(
                         width: 60,
@@ -97,6 +109,8 @@ class _ProductListPageState extends State<ProductListPage> {
                   children: [
                     Text(
                       i.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

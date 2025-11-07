@@ -2,10 +2,14 @@ import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class JournalReceiptPrinter {
   JournalReceiptPrinter._();
+  static const _logoPath = 'assets/images/djadol_bw.jpeg';
+  static img.Image? _logoImage;
 
   static Future<List<BluetoothInfo>> bondedDevices() async {
     try {
@@ -61,23 +65,21 @@ class JournalReceiptPrinter {
     final generator = Generator(PaperSize.mm58, profile);
     final bytes = <int>[];
 
+    await _appendLogo(bytes, generator);
+
     bytes.addAll(generator.text(
-      jurnal.retailIdName,
-      styles: const PosStyles(
-        bold: true,
-        height: PosTextSize.size2,
-        width: PosTextSize.size2,
-        align: PosAlign.center,
-      ),
-    ));
-    bytes.addAll(generator.text(
-      'Sales ID: ${jurnal.id}',
+      "Djava Distributor Gresik",
       styles: const PosStyles(align: PosAlign.center),
     ));
     bytes.addAll(generator.text(
-      'Tanggal: ${jurnal.createdAt}',
+      "Jl. Sedayu - Gresik",
       styles: const PosStyles(align: PosAlign.center),
     ));
+    bytes.addAll(generator.text(
+      "0819-3803-8445",
+      styles: const PosStyles(align: PosAlign.center),
+    ));
+
     bytes.addAll(generator.hr());
 
     for (final detail in jurnal.detail) {
@@ -90,8 +92,7 @@ class JournalReceiptPrinter {
         generator.row(
           [
             PosColumn(
-              text:
-                  '${detail.count} x ${detail.price.toString().toCurrency()}',
+              text: '${detail.count} x ${detail.price.toString().toCurrency()}',
               width: 6,
             ),
             PosColumn(
@@ -102,6 +103,7 @@ class JournalReceiptPrinter {
           ],
         ),
       );
+
       bytes.addAll(generator.feed(1));
     }
 
@@ -124,9 +126,18 @@ class JournalReceiptPrinter {
     ]));
     bytes.addAll(generator.feed(1));
     bytes.addAll(generator.text(
-      'Terima kasih',
-      styles: const PosStyles(align: PosAlign.center, bold: true),
+      'Tanggal: ${jurnal.createdAt}',
+      styles: const PosStyles(align: PosAlign.center),
     ));
+    bytes.addAll(generator.text(
+      'Sales ID: ${jurnal.id}',
+      styles: const PosStyles(align: PosAlign.center),
+    ));
+
+    // bytes.addAll(generator.text(
+    //   'Terima kasih',
+    //   styles: const PosStyles(align: PosAlign.center, bold: true),
+    // ));
     bytes.addAll(generator.feed(2));
 
     return bytes;
@@ -136,6 +147,8 @@ class JournalReceiptPrinter {
     final profile = await CapabilityProfile.load();
     final generator = Generator(PaperSize.mm58, profile);
     final bytes = <int>[];
+
+    await _appendLogo(bytes, generator);
 
     bytes.addAll(generator.text(
       'DJADOL MOBILE',
@@ -161,5 +174,43 @@ class JournalReceiptPrinter {
     bytes.addAll(generator.feed(2));
 
     return bytes;
+  }
+
+  static Future<void> _appendLogo(
+    List<int> bytes,
+    Generator generator,
+  ) async {
+    final logo = await _loadLogo();
+    if (logo == null) return;
+    bytes.addAll(
+      generator.imageRaster(
+        logo,
+        align: PosAlign.center,
+      ),
+    );
+    bytes.addAll(generator.feed(1));
+  }
+
+  static Future<img.Image?> _loadLogo() async {
+    if (_logoImage != null) {
+      return _logoImage;
+    }
+    try {
+      final data = await rootBundle.load(_logoPath);
+      final decoded = img.decodeImage(data.buffer.asUint8List());
+      if (decoded == null) return null;
+      final targetWidth = 192; // half of printable width
+      final resized = decoded.width == targetWidth
+          ? decoded
+          : img.copyResize(
+              decoded,
+              width: targetWidth,
+            );
+      _logoImage = resized;
+      return _logoImage;
+    } catch (e) {
+      debugPrint('Failed to load logo: $e');
+      return null;
+    }
   }
 }
