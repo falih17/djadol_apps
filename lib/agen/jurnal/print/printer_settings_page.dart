@@ -1,4 +1,5 @@
 import 'package:djadol_mobile/agen/jurnal/print/journal_receipt_printer.dart';
+import 'package:djadol_mobile/agen/jurnal/print/printer_device_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
@@ -64,6 +65,7 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
       );
       if (!success) throw Exception('Gagal menyambungkan');
       if (!mounted) return;
+      await PrinterDeviceStorage.save(device);
       setState(() {
         _connectedDevice = device;
         _isConnected = true;
@@ -289,7 +291,12 @@ class _StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final statusColor = isConnected ? Colors.green : Colors.redAccent;
     final statusText = isConnected ? 'Terhubung' : 'Tidak terhubung';
-    final deviceName = connectedDevice?.name ?? 'Belum dipilih';
+    String deviceName = 'Belum dipilih';
+    if (connectedDevice != null) {
+      deviceName = connectedDevice!.name.isEmpty
+          ? connectedDevice!.macAdress
+          : connectedDevice!.name;
+    }
 
     return Card(
       child: Padding(

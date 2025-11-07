@@ -1,5 +1,6 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/agen/jurnal/print/journal_receipt_printer.dart';
+import 'package:djadol_mobile/agen/jurnal/print/printer_device_storage.dart';
 import 'package:djadol_mobile/core/pages/async_value.dart';
 import 'package:djadol_mobile/core/pages/empty_page.dart';
 import 'package:djadol_mobile/core/utils/constans.dart';
@@ -20,11 +21,21 @@ class JurnalDetailPage extends StatefulWidget {
 class _JurnalDetailPageState extends State<JurnalDetailPage> {
   late Future<AsyncValue<Jurnal>> _future;
   bool _isPrinting = false;
+  BluetoothInfo? _preferredPrinter;
 
   @override
   void initState() {
     super.initState();
     _future = fetchData();
+    _loadPreferredPrinter();
+  }
+
+  Future<void> _loadPreferredPrinter() async {
+    final device = await PrinterDeviceStorage.load();
+    if (!mounted) return;
+    setState(() {
+      _preferredPrinter = device;
+    });
   }
 
   Future<AsyncValue<Jurnal>> fetchData() async {
@@ -103,8 +114,19 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
     }
   }
 
-  Future<void> _handlePrint(Jurnal jurnal) async {
+  Future<BluetoothInfo?> _selectAndSavePrinter() async {
     final device = await _selectPrinter();
+    if (!mounted || device == null) return null;
+    await PrinterDeviceStorage.save(device);
+    setState(() {
+      _preferredPrinter = device;
+    });
+    return device;
+  }
+
+  Future<void> _handlePrint(Jurnal jurnal) async {
+    var device = _preferredPrinter;
+    device ??= await _selectAndSavePrinter();
     if (!mounted || device == null) return;
     await _printWithDevice(jurnal, device);
   }
@@ -243,6 +265,30 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
                     ),
                   ),
                 ),
+                if (_preferredPrinter != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Printer: ${_preferredPrinter!.name.isEmpty ? _preferredPrinter!.macAdress : _preferredPrinter!.name}',
+                          textAlign: TextAlign.center,
+                        ),
+                        TextButton.icon(
+                          onPressed: _isPrinting ? null : _selectAndSavePrinter,
+                          icon: const Icon(Icons.edit),
+                          label: const Text('Ganti Printer'),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (_preferredPrinter == null)
+                  TextButton.icon(
+                    onPressed: _isPrinting ? null : _selectAndSavePrinter,
+                    icon: const Icon(Icons.print_outlined),
+                    label: const Text('Pilih Printer'),
+                  ),
                 const SizedBox(
                   height: 8,
                 )
