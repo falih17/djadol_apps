@@ -159,10 +159,13 @@ class JournalReceiptPrinter {
       styles: const PosStyles(align: PosAlign.center),
     ));
 
-    // bytes.addAll(generator.text(
-    //   'Terima kasih',
-    //   styles: const PosStyles(align: PosAlign.center, bold: true),
-    // ));
+    bytes.addAll(generator.feed(1));
+    bytes.addAll(generator.text(
+      'Terima Kasih',
+      styles: const PosStyles(align: PosAlign.center),
+    ));
+    bytes.addAll(generator.feed(1));
+
     bytes.addAll(generator.feed(2));
 
     return bytes;
