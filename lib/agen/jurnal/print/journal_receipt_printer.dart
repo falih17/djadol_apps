@@ -1,5 +1,6 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
+import 'package:djadol_mobile/core/utils/store.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -65,11 +66,19 @@ class JournalReceiptPrinter {
     final generator = Generator(PaperSize.mm58, profile);
     final bytes = <int>[];
 
-    await _appendLogo(bytes, generator);
+    // await _appendLogo(bytes, generator);
 
     bytes.addAll(generator.text(
-      "Djava Distributor Gresik",
-      styles: const PosStyles(align: PosAlign.center),
+      "Djava",
+      styles: const PosStyles(
+        align: PosAlign.center,
+        height: PosTextSize.size2,
+        width: PosTextSize.size2,
+      ),
+    ));
+    bytes.addAll(generator.text(
+      "Distributor Gresik",
+      styles: const PosStyles(align: PosAlign.center, bold: true),
     ));
     bytes.addAll(generator.text(
       "Jl. Sedayu - Gresik",
@@ -79,11 +88,27 @@ class JournalReceiptPrinter {
       "0819-3803-8445",
       styles: const PosStyles(align: PosAlign.center),
     ));
+    bytes.addAll(generator.feed(1));
+
+    bytes.addAll(generator.text(
+      "Bukti Pembayaran",
+      styles: const PosStyles(align: PosAlign.center),
+    ));
+    bytes.addAll(generator.feed(1));
+
+    bytes.addAll(generator.hr());
+    bytes.addAll(generator.text(
+      jurnal.retailIdName,
+      styles: const PosStyles(align: PosAlign.center),
+    ));
 
     bytes.addAll(generator.hr());
 
+    int countItem = 0;
+
     for (final detail in jurnal.detail) {
       final subtotal = detail.price * detail.count;
+      countItem += detail.count;
       bytes.addAll(generator.text(
         detail.productName,
         styles: const PosStyles(bold: true),
@@ -110,7 +135,7 @@ class JournalReceiptPrinter {
     bytes.addAll(generator.hr(ch: '='));
     bytes.addAll(generator.row([
       PosColumn(
-        text: 'TOTAL',
+        text: 'TOTAL ($countItem qty)',
         width: 6,
         styles: const PosStyles(bold: true),
       ),
@@ -130,7 +155,7 @@ class JournalReceiptPrinter {
       styles: const PosStyles(align: PosAlign.center),
     ));
     bytes.addAll(generator.text(
-      'Sales ID: ${jurnal.id}',
+      'Sales : (${Store().userId}) ${Store().fullName}',
       styles: const PosStyles(align: PosAlign.center),
     ));
 
@@ -148,7 +173,7 @@ class JournalReceiptPrinter {
     final generator = Generator(PaperSize.mm58, profile);
     final bytes = <int>[];
 
-    await _appendLogo(bytes, generator);
+    // await _appendLogo(bytes, generator);
 
     bytes.addAll(generator.text(
       'DJADOL MOBILE',
