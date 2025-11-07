@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'agen/inquiry/inquiry_list.dart';
 import 'agen/jurnal/jurnal_list.dart';
+import 'agen/jurnal/print/printer_settings_page.dart';
 import 'agen/retail/retail_list.dart';
 import 'core/geo_location/geo_location.dart';
 
@@ -270,6 +271,17 @@ class _HomePageState extends State<HomePage> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const RetailListPage(),
+                    ),
+                  ),
+                ),
+                MenuCardHorizontal(
+                  title: 'Setting Printer',
+                  description: 'Hubungkan printer thermal bluetooth',
+                  icon: Icons.print,
+                  gradient: gradient,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PrinterSettingsPage(),
                     ),
                   ),
                 ),

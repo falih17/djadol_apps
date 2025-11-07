@@ -1,62 +1,136 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
+import 'package:djadol_mobile/agen/jurnal/print/journal_receipt_printer.dart';
 import 'package:djadol_mobile/core/pages/async_value.dart';
 import 'package:djadol_mobile/core/pages/empty_page.dart';
 import 'package:djadol_mobile/core/utils/constans.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 import '../../core/utils/api_service.dart';
 
-class JurnalDetailPage extends StatelessWidget {
+class JurnalDetailPage extends StatefulWidget {
   final Jurnal item;
   const JurnalDetailPage({super.key, required this.item});
+
+  @override
+  State<JurnalDetailPage> createState() => _JurnalDetailPageState();
+}
+
+class _JurnalDetailPageState extends State<JurnalDetailPage> {
+  late Future<AsyncValue<Jurnal>> _future;
+  bool _isPrinting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = fetchData();
+  }
 
   Future<AsyncValue<Jurnal>> fetchData() async {
     try {
       await Future.delayed(const Duration(milliseconds: 1000));
       Map<String, dynamic> data = {
-        'jurnal_id': item.id,
+        'jurnal_id': widget.item.id,
       };
       List result = await ApiService().getList('/all/33', 0, 1000, data: data);
-      item.detail = result.map((i) => JurnalDetail.fromMap(i)).toList();
-      return AsyncValue.success(item);
+      widget.item.detail = result.map((i) => JurnalDetail.fromMap(i)).toList();
+      return AsyncValue.success(widget.item);
     } catch (e) {
       debugPrint(e.toString());
       return AsyncValue.failure("Error Loading Data");
     }
   }
 
+  Future<BluetoothInfo?> _selectPrinter() async {
+    final devices = await JournalReceiptPrinter.bondedDevices();
+    if (!mounted) return null;
+    if (devices.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Tidak ada printer bluetooth terpasang'),
+        ),
+      );
+      return null;
+    }
+
+    return showModalBottomSheet<BluetoothInfo>(
+      context: context,
+      builder: (ctx) {
+        return SafeArea(
+          child: ListView(
+            children: devices
+                .map(
+                  (device) => ListTile(
+                        title: Text(device.name.isEmpty ? 'Printer' : device.name),
+                        subtitle: Text(device.macAdress),
+                        onTap: () => Navigator.of(ctx).pop(device),
+                      ),
+                )
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _printWithDevice(
+    Jurnal jurnal,
+    BluetoothInfo device,
+  ) async {
+    setState(() {
+      _isPrinting = true;
+    });
+    try {
+      await JournalReceiptPrinter.printJournal(jurnal, device: device);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Struk dikirim ke ${device.name.isEmpty ? 'printer' : device.name}'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal mencetak: $e')),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isPrinting = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _handlePrint(Jurnal jurnal) async {
+    final device = await _selectPrinter();
+    if (!mounted || device == null) return;
+    await _printWithDevice(jurnal, device);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sales'),
-        // title: Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Text(item.retailIdName),
-        //     item.isNew == '1'
-        //         ? const Icon(Icons.new_releases, color: Colors.green)
-        //         : const SizedBox.shrink()
-        //   ],
-        // ),
+        title: const Text('Sales'),
       ),
       body: ZPageFuture<Jurnal>(
-        future: fetchData(),
+        future: _future,
         success: (value) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(item.retailIdName,
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                SizedBox(
+                Text(widget.item.retailIdName,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold)),
+                const SizedBox(
                   height: 10,
                 ),
                 Expanded(
                   child: (value.detail.isEmpty)
-                      ? EmptyPage()
+                      ? const EmptyPage()
                       : ListView.builder(
                           itemCount: value.detail.length,
                           itemBuilder: (context, index) {
@@ -92,7 +166,7 @@ class JurnalDetailPage extends StatelessWidget {
                                     child: ListTile(
                                       title: Text(
                                         detail.productName,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -106,7 +180,7 @@ class JurnalDetailPage extends StatelessWidget {
                                             (detail.subtotal * -1)
                                                 .toString()
                                                 .toCurrency(),
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: Constants.mColorBlue,
@@ -123,7 +197,7 @@ class JurnalDetailPage extends StatelessWidget {
                         ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -144,8 +218,33 @@ class JurnalDetailPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      onPressed: _isPrinting || value.detail.isEmpty
+                          ? null
+                          : () => _handlePrint(value),
+                      icon: _isPrinting
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.print),
+                      label: Text(
+                        _isPrinting ? 'Mencetak...' : 'Print Thermal',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
                 )
               ],
             ),
