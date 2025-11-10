@@ -1,6 +1,7 @@
 import 'package:djadol_mobile/agen/jurnal/jurnal.dart';
 import 'package:djadol_mobile/agen/jurnal/print/journal_receipt_printer.dart';
 import 'package:djadol_mobile/agen/jurnal/print/printer_device_storage.dart';
+import 'package:djadol_mobile/agen/jurnal/print/printer_settings_page.dart';
 import 'package:djadol_mobile/core/pages/async_value.dart';
 import 'package:djadol_mobile/core/pages/empty_page.dart';
 import 'package:djadol_mobile/core/utils/constans.dart';
@@ -21,20 +22,23 @@ class JurnalDetailPage extends StatefulWidget {
 class _JurnalDetailPageState extends State<JurnalDetailPage> {
   late Future<AsyncValue<Jurnal>> _future;
   bool _isPrinting = false;
+  bool _isPrinterConnected = false;
   BluetoothInfo? _preferredPrinter;
 
   @override
   void initState() {
     super.initState();
     _future = fetchData();
-    _loadPreferredPrinter();
+    _refreshPrinterStatus();
   }
 
-  Future<void> _loadPreferredPrinter() async {
+  Future<void> _refreshPrinterStatus() async {
     final device = await PrinterDeviceStorage.load();
+    final isConnected = await PrintBluetoothThermal.connectionStatus;
     if (!mounted) return;
     setState(() {
       _preferredPrinter = device;
+      _isPrinterConnected = device != null && isConnected;
     });
   }
 
@@ -51,38 +55,6 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
       debugPrint(e.toString());
       return AsyncValue.failure("Error Loading Data");
     }
-  }
-
-  Future<BluetoothInfo?> _selectPrinter() async {
-    final devices = await JournalReceiptPrinter.bondedDevices();
-    if (!mounted) return null;
-    if (devices.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tidak ada printer bluetooth terpasang'),
-        ),
-      );
-      return null;
-    }
-
-    return showModalBottomSheet<BluetoothInfo>(
-      context: context,
-      builder: (ctx) {
-        return SafeArea(
-          child: ListView(
-            children: devices
-                .map(
-                  (device) => ListTile(
-                        title: Text(device.name.isEmpty ? 'Printer' : device.name),
-                        subtitle: Text(device.macAdress),
-                        onTap: () => Navigator.of(ctx).pop(device),
-                      ),
-                )
-                .toList(),
-          ),
-        );
-      },
-    );
   }
 
   Future<void> _printWithDevice(
@@ -105,6 +77,7 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal mencetak: $e')),
       );
+      await _openPrinterSettings();
     } finally {
       if (mounted) {
         setState(() {
@@ -114,21 +87,65 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
     }
   }
 
-  Future<BluetoothInfo?> _selectAndSavePrinter() async {
-    final device = await _selectPrinter();
-    if (!mounted || device == null) return null;
-    await PrinterDeviceStorage.save(device);
-    setState(() {
-      _preferredPrinter = device;
-    });
-    return device;
+  Future<void> _handlePrint(Jurnal jurnal) async {
+    if (!_isPrinterConnected || _preferredPrinter == null) {
+      await _openPrinterSettings();
+    }
+    if (!_isPrinterConnected || _preferredPrinter == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Silakan hubungkan printer terlebih dahulu')),
+      );
+      return;
+    }
+    await _printWithDevice(jurnal, _preferredPrinter!);
   }
 
-  Future<void> _handlePrint(Jurnal jurnal) async {
-    var device = _preferredPrinter;
-    device ??= await _selectAndSavePrinter();
-    if (!mounted || device == null) return;
-    await _printWithDevice(jurnal, device);
+  Future<void> _openPrinterSettings() async {
+    if (!mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const PrinterSettingsPage(),
+      ),
+    );
+    await _refreshPrinterStatus();
+  }
+
+  Widget _buildPrimaryButton(Jurnal jurnal) {
+    final ready = _isPrinterConnected && _preferredPrinter != null;
+    final bool isDetailEmpty = jurnal.detail.isEmpty;
+    final bool disablePrint = _isPrinting || isDetailEmpty;
+
+    final VoidCallback? onPressed = ready
+        ? (disablePrint ? null : () => _handlePrint(jurnal))
+        : (_isPrinting ? null : () => _openPrinterSettings());
+
+    final Color backgroundColor = ready ? Colors.green : Colors.grey;
+    final Widget icon = ready
+        ? (_isPrinting
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
+              )
+            : const Icon(Icons.print))
+        : const Icon(Icons.settings_bluetooth);
+    final String label = ready
+        ? (_isPrinting ? 'Mencetak...' : 'Print Thermal')
+        : 'Hubungkan printer';
+
+    return FilledButton.icon(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        backgroundColor: backgroundColor,
+        foregroundColor: Colors.white,
+      ),
+      icon: icon,
+      label: Text(label),
+    );
   }
 
   @override
@@ -245,50 +262,9 @@ class _JurnalDetailPageState extends State<JurnalDetailPage> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: SizedBox(
                     width: double.infinity,
-                    child: FilledButton.icon(
-                      onPressed: _isPrinting || value.detail.isEmpty
-                          ? null
-                          : () => _handlePrint(value),
-                      icon: _isPrinting
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Icon(Icons.print),
-                      label: Text(
-                        _isPrinting ? 'Mencetak...' : 'Print Thermal',
-                      ),
-                    ),
+                    child: _buildPrimaryButton(value),
                   ),
                 ),
-                if (_preferredPrinter != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Printer: ${_preferredPrinter!.name.isEmpty ? _preferredPrinter!.macAdress : _preferredPrinter!.name}',
-                          textAlign: TextAlign.center,
-                        ),
-                        TextButton.icon(
-                          onPressed: _isPrinting ? null : _selectAndSavePrinter,
-                          icon: const Icon(Icons.edit),
-                          label: const Text('Ganti Printer'),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (_preferredPrinter == null)
-                  TextButton.icon(
-                    onPressed: _isPrinting ? null : _selectAndSavePrinter,
-                    icon: const Icon(Icons.print_outlined),
-                    label: const Text('Pilih Printer'),
-                  ),
                 const SizedBox(
                   height: 8,
                 )
