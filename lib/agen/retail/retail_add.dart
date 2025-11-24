@@ -44,6 +44,8 @@ class _RetailAddPageState extends State<RetailAddPage> {
         'name': name.text,
         'address': address.text,
         'phone': phone.text,
+        'location_lat': latitude,
+        'location_long': longitude,
       };
       if (picture != null) {
         data.addAll({'picture': multiPartFile(picture!.path)});
