@@ -50,8 +50,8 @@ class _RetailAddPageState extends State<RetailAddPage> {
       }
 
       if (widget.item == null) {
-        data['latitude'] = latitude;
-        data['longitude'] = longitude;
+        data['location_lat'] = latitude;
+        data['location_long'] = longitude;
 
         await ApiService().post('/form_action', data, context: context);
       } else {
