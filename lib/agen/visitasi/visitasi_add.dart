@@ -50,7 +50,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
         ZToast.error(context, 'Network error or other issue');
       }
     } catch (e) {
-      ZToast.error(context, e.toString());
+      ZToast.error(context, 'Sorry something wrong');
     }
   }
 
