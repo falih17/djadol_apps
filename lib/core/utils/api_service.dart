@@ -18,10 +18,8 @@ class ApiService {
     Map<String, dynamic>? defaultHeaders,
     Duration? connectTimeout,
     Duration? receiveTimeout,
-    void Function(RequestOptions options, RequestInterceptorHandler handler)?
-        onRequest,
-    void Function(Response response, ResponseInterceptorHandler handler)?
-        onResponse,
+    void Function(RequestOptions options, RequestInterceptorHandler handler)? onRequest,
+    void Function(Response response, ResponseInterceptorHandler handler)? onResponse,
     void Function(DioException e, ErrorInterceptorHandler handler)? onError,
   }) {
     _dio = Dio(BaseOptions(
@@ -75,8 +73,7 @@ class ApiService {
     // setToken(data['token']);
   }
 
-  Future<dynamic> get(String url,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> get(String url, {Map<String, dynamic>? queryParameters}) async {
     try {
       Response response = await _dio.get(
         url,
@@ -133,9 +130,7 @@ class ApiService {
   }
 
   Future<Response> patch(String url, String id, Map<String, dynamic> data,
-      {Map<String, dynamic>? queryParameters,
-      List<Map> files = const [],
-      BuildContext? context}) async {
+      {Map<String, dynamic>? queryParameters, List<Map> files = const [], BuildContext? context}) async {
     try {
       if (context != null) LoadingScreen.instance.show(context);
       FormData formData = FormData.fromMap(data);

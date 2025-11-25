@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:djadol_mobile/agen/retail/retail_add.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -42,6 +43,13 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
 
       await ApiService().post('/form_action', data, context: context);
       Navigator.pop(context, true);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        ZToast.error(context, e.response!.data['message'] ?? 'Sorry something wrong');
+      } else {
+        // Handle errors without a response (e.g., network issues)
+        ZToast.error(context, 'Network error or other issue');
+      }
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
     }
@@ -137,7 +145,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
                   text: 'Simpan Visitasi',
                   onPressed: () {
                     if (!_formKey.currentState!.validate()) return;
-                    if(latitude == null ){
+                    if (latitude == null) {
                       ZToast.error(context, 'Lokasi tidak ditemukan');
                       return;
                     }
