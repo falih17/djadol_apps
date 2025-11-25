@@ -39,11 +39,10 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
       if (picture != null) {
         data.addAll({'photo': multiPartFile(picture!.path)});
       }
-
       await ApiService().post('/form_action', data, context: context);
       Navigator.pop(context, true);
     } catch (e) {
-      ZToast.error(context, 'Sorry something wrong');
+      ZToast.error(context, e.toString());
     }
   }
 
