@@ -40,7 +40,6 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
       if (picture != null) {
         data.addAll({'photo': multiPartFile(picture!.path)});
       }
-
       await ApiService().post('/form_action', data, context: context);
       Navigator.pop(context, true);
     } on DioException catch (e) {
@@ -51,7 +50,7 @@ class _VisitasiAddPageState extends State<VisitasiAddPage> {
         ZToast.error(context, 'Network error or other issue');
       }
     } catch (e) {
-      ZToast.error(context, 'Sorry something wrong');
+      ZToast.error(context, e.toString());
     }
   }
 
