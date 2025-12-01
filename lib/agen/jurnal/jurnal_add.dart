@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:djadol_mobile/agen/jurnal/product_list.dart';
 import 'package:djadol_mobile/core/utils/ext_currency.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +84,14 @@ class _JurnalAddPageState extends State<JurnalAddPage> {
 
         await ApiService().post('/bulk/form_action/20', data, context: context);
         Navigator.pop(context, true);
-      } catch (e) {
+      } on DioException catch (e) {
+        if (e.response != null) {
+          ZToast.error(context, e.response!.data['message'] ?? 'Sorry something wrong');
+        } else {
+          // Handle errors without a response (e.g., network issues)
+          ZToast.error(context, 'Network error or other issue');
+        }
+      }catch (e) {
         ZToast.error(context, 'Sorry something wrong');
       }
     }
