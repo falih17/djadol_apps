@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:djadol_mobile/core/geo_location/geo_widget.dart';
 import 'package:djadol_mobile/core/widgets/zui.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,13 @@ class _AbsentAddPageState extends State<AbsentAddPage> {
 
       await ApiService().post('/form_action', data, context: context);
       Navigator.pop(context, true);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        ZToast.error(context, e.response!.data['message'] ?? 'Sorry something wrong');
+      } else {
+        // Handle errors without a response (e.g., network issues)
+        ZToast.error(context, 'Network error or other issue');
+      }
     } catch (e) {
       ZToast.error(context, 'Sorry something wrong');
     }
